@@ -89,19 +89,16 @@ jobs:
       - run:
           name: Deploy to AWS CloudFront
           command: |
-            aws configure set preview.cloudfront
+            aws configure set preview.cloudfront true
             aws configure set aws_access_key_id ${AWS_ACCESS_KEY_ID}
             aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
             if [ "${CURRENT_BRANCH}" == "master" ]
             then
-              echo "Current branch is ${CURRENT_BRANCH}"
               aws cloudfront create-invalidation --distribution-id ${PROD_DISTRIBUTION_ID} --paths /\*
             elif [ "${CURRENT_BRANCH}" == "staging" ]
             then
-              echo "Current branch is ${CURRENT_BRANCH}"
               aws cloudfront create-invalidation --distribution-id ${STAGING_DISTRIBUTION_ID} --paths /\*
             else
-              echo "Current branch is ${CURRENT_BRANCH}"
               aws cloudfront create-invalidation --distribution-id ${DEV_DISTRIBUTION_ID} --paths /\*
             fi
 
