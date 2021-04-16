@@ -25,7 +25,7 @@ aliases:
       paths:
         - node_modules
       key: app-{{ checksum "package.json" }}
-  - &build-project
+  - &build
     run:
       name: Build Project
       command: |
@@ -59,7 +59,7 @@ jobs:
       - checkout
       - *show-current-branch-name
       - *install-aws-cli
-      - *build-project
+      - *build
       - run:
           name: Deploy to AWS S3
           command: |
@@ -81,7 +81,7 @@ jobs:
       - checkout
       - *show-current-branch-name
       - *install-aws-cli
-      - *build-project
+      - *build
       - run:
           name: Deploy to AWS CloudFront
           command: |
