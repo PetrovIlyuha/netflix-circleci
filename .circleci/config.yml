@@ -75,8 +75,9 @@ jobs:
           working_directory: /
           command: |
             sudo apt-get -y -qq update
-            sudo apt-get install -y awscli
             sudo apt-get install -y python3-pip python-dev build-essential
+            sudo pip install awscli
+            aws --version
       - run:
           name: Build Project
           command: |
