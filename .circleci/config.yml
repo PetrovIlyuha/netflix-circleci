@@ -76,7 +76,7 @@ jobs:
           command: |
             sudo apt-get -y -qq update
             sudo apt-get install -y python3-pip python-dev build-essential
-            python3 -m pip install awscli
+            sudo pip3 install awscli
             aws --version
       - run:
           name: Build Project
@@ -94,12 +94,15 @@ jobs:
             aws configure set aws_secret_access_key ${AWS_SECRET_ACCESS_KEY}
             if [ "${CURRENT_BRANCH}" == "master" ]
             then
+              echo "Current branch is ${CURRENT_BRANCH}"
               aws cloudfront create-invalidation --distribution-id ${PROD_DISTRIBUTION_ID} --paths /\*
             elif [ "${CURRENT_BRANCH}" == "staging" ]
             then
+              echo "Current branch is ${CURRENT_BRANCH}"
               aws cloudfront create-invalidation --distribution-id ${STAGING_DISTRIBUTION_ID} --paths /\*
             else
-              aws cloudfront create-invalidation --distribution-id E2J8HU6GGZCJWU --paths /\*
+              echo "Current branch is ${CURRENT_BRANCH}"
+              aws cloudfront create-invalidation --distribution-id ${DEV_DISTRIBUTION_ID} --paths /\*
             fi
 
 workflows:
