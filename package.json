@@ -47,6 +47,8 @@
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^5.1.0",
-    "prettier": "^2.2.1"
+    "node-sass": "^5.0.0",
+    "prettier": "^2.2.1",
+    "react-helmet-async": "^1.0.9"
   }
 }
