@@ -23,7 +23,6 @@
   "plugins": ["react"],
   "rules": {
     "semi": [2, "always"],
-    "comma-dangle": ["always"],
     "space-before-function-paren": [
       0,
       { "anonymous": "always", "named": "always" }
