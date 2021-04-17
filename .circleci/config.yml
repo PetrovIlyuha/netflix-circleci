@@ -175,7 +175,7 @@ workflows:
       - notify-on-slack:
           requires:
             - deploy-to-aws-cloudfront
-          filters
+          filters:
             branches:
               only:
                 - develop
