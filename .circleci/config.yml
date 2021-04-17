@@ -63,6 +63,16 @@ jobs:
           name: Running es-list
           command: npm run lint
 
+  prettier:
+    executor: job-starter
+    steps:
+      - checkout
+      - *show-current-branch-name
+      - *restore-cache
+      - run:
+          name: Running prettier against the codebase
+          command: npm run prettier:check
+
   deploy-to-aws-s3:
     executor: job-starter
     steps:
@@ -121,9 +131,18 @@ workflows:
                 - develop
                 - staging
                 - master
+      - prettier:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - develop
+                - staging
+                - master
       - deploy-to-aws-s3:
           requires:
-            - linting
+            - prettier
           filters:
             branches:
               only:
