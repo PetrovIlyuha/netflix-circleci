@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Header.scss';
 import logo from '../../logo.svg';
+import { motion } from 'framer-motion';
 
 const HeaderLinks = [
   {
@@ -26,9 +27,18 @@ const HeaderLinks = [
 
 const Header = () => {
   const [mobileMenu, setMobileMenu] = useState(false);
+  const [underlineIndex, setUnderlineIndex] = useState(null);
+  const [underlineClass, setUnderlineClass] = useState(
+    'underlined_now_playing'
+  );
 
   const toggleMobileMenu = () => {
     setMobileMenu((prev) => !prev);
+  };
+  const showUnderLineForMenuItem = (index) => {
+    const className = HeaderLinks.find((l) => l.id === index).apiCall;
+    setUnderlineClass('underlined' + `_${className}`);
+    setUnderlineIndex(index);
   };
   return (
     <React.Fragment>
@@ -41,7 +51,9 @@ const Header = () => {
           </div>
           <div
             className={
-              mobileMenu ? 'header-menu-toggle is-active' : 'header-menu-toggle'
+              mobileMenu
+                ? 'header-menu-toggle is-active-bars'
+                : 'header-menu-toggle'
             }
             id="header-mobile-menu"
             onClick={toggleMobileMenu}
@@ -56,11 +68,27 @@ const Header = () => {
             }
           >
             {HeaderLinks.map((link) => (
-              <li key={link.id} className="header-nav-item">
+              <li
+                key={link.id}
+                className={
+                  underlineIndex === link.id
+                    ? 'header-nav-item is-active'
+                    : 'header-nav-item'
+                }
+                onClick={() => showUnderLineForMenuItem(link.id)}
+              >
                 <span className="header-list-name">
                   <i className={link.icon}></i>
                 </span>{' '}
                 {link.content}
+                {underlineIndex === link.id && (
+                  <motion.span
+                    initial={{ opacity: 0, scale: 0.4 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3 }}
+                    className={underlineClass}
+                  ></motion.span>
+                )}
               </li>
             ))}
             <input
