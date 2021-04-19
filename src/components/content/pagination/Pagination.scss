@@ -1,0 +1,51 @@
+.paginate-button {
+  background-color: #dd003f;
+  padding: 5px 15px;
+  text-transform: uppercase;
+  color: #ffffff;
+  border: none;
+  font-size: 1.4rem;
+  border-radius: 30px;
+  margin: 0 15px;
+  width: 130px;
+  outline: none !important;
+  transition: all 0.24s ease-out;
+  &:hover {
+    background-color: #dd113f;
+    box-shadow: 2px 3px 10px rgba(233, 233, 244, 0.3);
+  }
+}
+
+.disable {
+  cursor: none;
+  pointer-events: none;
+  background: rgba(155, 151, 151, 0.247);
+  color: rgba(255, 255, 255, 0.199);
+}
+
+.pageCount {
+  color: #ffffff;
+  margin: 0 5px;
+  padding: 10px 5px;
+}
+
+@media only screen and (max-width: 1080px) {
+  .paginate-button {
+    max-width: 110px;
+    font-size: 1rem;
+    padding: 5px 14px !important;
+    margin: 0 13px;
+  }
+}
+
+@media only screen and (max-width: 850px) {
+  .paginate-button {
+    max-width: 95px;
+    font-size: 0.8rem;
+    padding: 4px 12px;
+    margin: 0 12px;
+  }
+}
+
+// @media only screen and (max-width: 720px) {
+// }
