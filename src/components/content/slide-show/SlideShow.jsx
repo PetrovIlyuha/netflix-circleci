@@ -87,7 +87,7 @@ const SlideShow = () => {
     <React.Fragment>
       <div className="slider">
         <div className="slider-slides">
-          {images?.length > 0 && (
+          {images.length > 0 && (
             <CSSTransition
               in={sliderAnimation}
               timeout={500}
