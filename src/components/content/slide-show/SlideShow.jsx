@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Indicators from './Indicators.tsx';
+import Indicators from './Indicators.jsx';
 import { CSSTransition } from 'react-transition-group';
 import './SlideShow.scss';
 
