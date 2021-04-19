@@ -6,7 +6,10 @@ interface IndicatorProps {
 }
 
 // eslint-disable-next-line react/prop-types
-const Indicators: React.FunctionComponent<IndicatorProps> = ({ currentSlide, slides }) => {
+const Indicators: React.FunctionComponent<IndicatorProps> = ({
+  currentSlide,
+  slides
+}) => {
   const indicators = Array(slides)
     .fill(0)
     .map((_, index) => {
