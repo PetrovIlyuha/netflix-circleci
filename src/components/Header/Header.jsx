@@ -2,8 +2,16 @@ import React, { useState } from 'react';
 import './Header.scss';
 import logo from '../../logo.svg';
 import { motion } from 'framer-motion';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  getMoviesByType,
+  setCurrentList,
+  setPreloadedData,
+  triggerScrollToGrid
+} from '../../redux/moviesSlice';
+import { posterImageUrl } from '../content/movieGrid/MovieGrid';
 
-const HeaderLinks = [
+export const HeaderLinks = [
   {
     id: '329fj',
     icon: 'fas fa-film',
@@ -26,6 +34,8 @@ const HeaderLinks = [
 ];
 
 const Header = () => {
+  const dispatch = useDispatch();
+  const { movies } = useSelector((state) => state.movies);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [underlineIndex, setUnderlineIndex] = useState(null);
   const [underlineClass, setUnderlineClass] = useState(
@@ -35,11 +45,28 @@ const Header = () => {
   const toggleMobileMenu = () => {
     setMobileMenu((prev) => !prev);
   };
+
+  const getDataAndSetStyle = (index, type) => {
+    showUnderLineForMenuItem(index);
+    dispatch(triggerScrollToGrid());
+    dispatch(setCurrentList(type));
+    if (mobileMenu) setMobileMenu(false);
+    const moviesPrevLoaded = localStorage.getItem(type);
+    if (!moviesPrevLoaded) {
+      dispatch(getMoviesByType(type));
+    } else {
+      if (!movies[type]) {
+        const data = JSON.parse(localStorage.getItem(type));
+        dispatch(setPreloadedData({ type, data }));
+      }
+    }
+  };
   const showUnderLineForMenuItem = (index) => {
     const className = HeaderLinks.find((l) => l.id === index).apiCall;
     setUnderlineClass('underlined' + `_${className}`);
     setUnderlineIndex(index);
   };
+  console.log(mobileMenu);
   return (
     <React.Fragment>
       <div className="header-nav-wrapper">
@@ -66,6 +93,16 @@ const Header = () => {
             className={
               mobileMenu ? 'header-nav header-mobile-nav' : 'header-nav'
             }
+            style={{
+              backgroundImage: mobileMenu
+                ? `url(${posterImageUrl}${
+                    movies.popular.results[
+                      Math.floor(Math.random() * movies.popular.results.length)
+                    ].poster_path
+                  })`
+                : '',
+              backgroundSize: 'cover'
+            }}
           >
             {HeaderLinks.map((link) => (
               <li
@@ -75,7 +112,7 @@ const Header = () => {
                     ? 'header-nav-item is-active'
                     : 'header-nav-item'
                 }
-                onClick={() => showUnderLineForMenuItem(link.id)}
+                onClick={() => getDataAndSetStyle(link.id, link.apiCall)}
               >
                 <span className="header-list-name">
                   <i className={link.icon}></i>
