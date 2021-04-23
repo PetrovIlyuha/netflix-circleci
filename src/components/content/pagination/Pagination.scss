@@ -28,24 +28,3 @@
   margin: 0 5px;
   padding: 10px 5px;
 }
-
-@media only screen and (max-width: 1080px) {
-  .paginate-button {
-    max-width: 110px;
-    font-size: 1rem;
-    padding: 5px 14px !important;
-    margin: 0 13px;
-  }
-}
-
-@media only screen and (max-width: 850px) {
-  .paginate-button {
-    max-width: 95px;
-    font-size: 0.8rem;
-    padding: 4px 12px;
-    margin: 0 12px;
-  }
-}
-
-// @media only screen and (max-width: 720px) {
-// }
