@@ -66,7 +66,6 @@ const Header = () => {
     setUnderlineClass('underlined' + `_${className}`);
     setUnderlineIndex(index);
   };
-  console.log(mobileMenu);
   return (
     <React.Fragment>
       <div className="header-nav-wrapper">
