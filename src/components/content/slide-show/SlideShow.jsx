@@ -2,26 +2,23 @@ import React, { useState, useEffect } from 'react';
 import Indicators from './Indicators.jsx';
 import { CSSTransition } from 'react-transition-group';
 import './SlideShow.scss';
+import { useSelector } from 'react-redux';
+import { posterImageUrl } from '../movieGrid/MovieGrid.jsx';
 
 const SlideShow = () => {
   // eslint-disable-next-line
-  const [images, setImages] = useState([
-    {
-      src:
-        'https://i0.wp.com/itc.ua/wp-content/uploads/2019/02/Dune_Concept_Art_Illustration_Eduardo_Pena-1.jpg?fit=1400%2C764&quality=100&strip=all&ssl=1',
-      index: 0
-    },
-    { src: 'https://i.ytimg.com/vi/xgbPSA94Rqg/maxresdefault.jpg', index: 1 },
-    {
-      src:
-        'https://ixbt.online/gametech/covers/2021/03/11/jKrFbZzjOhBdsRtOsvbPoqCblvxSkqIph87Odsnc.jpg?w=948',
-      index: 2
-    },
-    {
-      src: 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/tagteam.jpg',
-      index: 3
+  const { movies, currentlyShowing } = useSelector((state) => state.movies);
+  const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    if (movies[currentlyShowing]) {
+      const prepareImages = movies[currentlyShowing].results.map(
+        (img) => `${posterImageUrl}${img.poster_path}`
+      );
+      setImages(prepareImages);
     }
-  ]);
+  }, [currentlyShowing]);
+
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [sliderAnimation, setSliderAnimation] = useState(false);
   const slideIndexRef = React.useRef(0);
@@ -61,25 +58,21 @@ const SlideShow = () => {
     if (direction === 'prev' && slideIndexRef.current > 0) {
       slideIndexRef.current -= 1;
       setCurrentSlideIndex(slideIndexRef.current);
-      // triggerSlideAnimation();
     } else if (direction === 'prev' && slideIndexRef.current === 0) {
       slideIndexRef.current = images.length - 1;
       setCurrentSlideIndex(slideIndexRef.current);
-      // triggerSlideAnimation();
     } else if (
       direction === 'next' &&
       slideIndexRef.current < images.length - 1
     ) {
       slideIndexRef.current += 1;
       setCurrentSlideIndex(slideIndexRef.current);
-      // triggerSlideAnimation();
     } else if (
       direction === 'next' &&
       slideIndexRef.current === images.length - 1
     ) {
       slideIndexRef.current = 0;
       setCurrentSlideIndex(slideIndexRef.current);
-      // triggerSlideAnimation();
     }
   };
 
@@ -96,7 +89,8 @@ const SlideShow = () => {
               <div
                 className="slider-image"
                 style={{
-                  backgroundImage: `url(${images[slideIndexRef.current].src})`
+                  backgroundImage: `url(${images[slideIndexRef.current]})`,
+                  objectFit: 'cover'
                 }}
               />
             </CSSTransition>
