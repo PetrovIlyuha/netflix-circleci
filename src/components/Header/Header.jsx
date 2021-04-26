@@ -6,10 +6,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   getMoviesByType,
   setCurrentList,
+  setPage,
   setPreloadedData,
   triggerScrollToGrid
 } from '../../redux/moviesSlice';
-import { posterImageUrl } from '../content/movieGrid/MovieGrid';
+import { IMAGE_URL } from '../../services/apiService/movies.service';
 
 export const HeaderLinks = [
   {
@@ -35,7 +36,7 @@ export const HeaderLinks = [
 
 const Header = () => {
   const dispatch = useDispatch();
-  const { movies } = useSelector((state) => state.movies);
+  const { movies, page } = useSelector((state) => state.movies);
   const [mobileMenu, setMobileMenu] = useState(false);
   const [underlineIndex, setUnderlineIndex] = useState(null);
   const [underlineClass, setUnderlineClass] = useState(
@@ -47,18 +48,17 @@ const Header = () => {
   };
 
   const getDataAndSetStyle = (index, type) => {
+    dispatch(setPage(1));
     showUnderLineForMenuItem(index);
     dispatch(triggerScrollToGrid());
     dispatch(setCurrentList(type));
     if (mobileMenu) setMobileMenu(false);
     const moviesPrevLoaded = localStorage.getItem(type);
     if (!moviesPrevLoaded) {
-      dispatch(getMoviesByType(type));
-    } else {
-      if (!movies[type]) {
-        const data = JSON.parse(localStorage.getItem(type));
-        dispatch(setPreloadedData({ type, data }));
-      }
+      dispatch(getMoviesByType({ type, page }));
+    } else if (!movies[type]) {
+      const data = JSON.parse(localStorage.getItem(type));
+      dispatch(setPreloadedData({ type, data }));
     }
   };
   const showUnderLineForMenuItem = (index) => {
@@ -94,7 +94,7 @@ const Header = () => {
             }
             style={{
               backgroundImage: mobileMenu
-                ? `url(${posterImageUrl}${
+                ? `url(${IMAGE_URL}${
                     movies.popular.results[
                       Math.floor(Math.random() * movies.popular.results.length)
                     ].poster_path
