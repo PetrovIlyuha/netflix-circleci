@@ -10,7 +10,6 @@ import {
   setPreloadedData,
   triggerScrollToGrid
 } from '../../redux/moviesSlice';
-import { IMAGE_URL } from '../../services/apiService/movies.service';
 
 export const HeaderLinks = [
   {
@@ -92,16 +91,6 @@ const Header = () => {
             className={
               mobileMenu ? 'header-nav header-mobile-nav' : 'header-nav'
             }
-            style={{
-              backgroundImage: mobileMenu
-                ? `url(${IMAGE_URL}${
-                    movies.popular.results[
-                      Math.floor(Math.random() * movies.popular.results.length)
-                    ].poster_path
-                  })`
-                : '',
-              backgroundSize: 'cover'
-            }}
           >
             {HeaderLinks.map((link) => (
               <li
