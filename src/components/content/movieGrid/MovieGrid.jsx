@@ -10,7 +10,6 @@ import {
 import './MovieGrid.scss';
 import Rating from '../rating/Rating';
 import { IMAGE_URL } from '../../../services/apiService/movies.service';
-import Spinner from '../../spinner/Spinner';
 
 const MovieGrid = () => {
   const dispatch = useDispatch();
@@ -18,7 +17,6 @@ const MovieGrid = () => {
     movies,
     currentlyShowing,
     setGridIntoView,
-    loading,
     page: storedPage
   } = useSelector((state) => state.movies);
   const gridRef = useRef();
@@ -54,7 +52,6 @@ const MovieGrid = () => {
   }, []);
   return (
     <div className="grid" ref={gridRef}>
-      {loading && <Spinner />}
       {movies[currentlyShowing] &&
         movies[currentlyShowing].results.map((movie, index) => (
           <motion.div
