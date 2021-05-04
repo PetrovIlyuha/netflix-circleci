@@ -14,9 +14,12 @@ const Pagination = () => {
     (state) => state.movies
   );
 
-  const totalPagesPagination = movies[currentlyShowing]
-    ? totalPages
-    : Math.ceil(movies[currentlyShowing]?.results.length / 10);
+  const totalPagesPagination =
+    movies[currentlyShowing] !== undefined
+      ? totalPages
+      : movies[currentlyShowing]
+      ? Math.ceil(movies[currentlyShowing].results.length / 10)
+      : 0;
   const changePage = (type) => {
     switch (type) {
       case 'prev':
