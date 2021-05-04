@@ -11,6 +11,7 @@ const SlideShow = () => {
     (state) => state.movies
   );
   const [images, setImages] = useState([]);
+
   useEffect(() => {
     if (currentSlideshowImages.length) {
       setImages(currentSlideshowImages.slice(0, 6));

@@ -10,6 +10,7 @@ import {
 import './MovieGrid.scss';
 import Rating from '../rating/Rating';
 import { IMAGE_URL } from '../../../services/apiService/movies.service';
+import LazyLoadedImage from '../../lazy-load/LazyLoadedImage';
 
 const MovieGrid = () => {
   const dispatch = useDispatch();
@@ -21,6 +22,7 @@ const MovieGrid = () => {
   } = useSelector((state) => state.movies);
   const gridRef = useRef();
   const [page, setPage] = useState(1);
+
   useEffect(() => {
     setPage(storedPage);
   }, [storedPage]);
@@ -47,7 +49,7 @@ const MovieGrid = () => {
       );
       dispatch(setPreloadedData({ type: 'popular', data: popularData }));
     } else {
-      dispatch(getMoviesByType('popular', page));
+      dispatch(getMoviesByType({ type: 'popular', page }));
     }
   }, []);
   return (
@@ -60,11 +62,10 @@ const MovieGrid = () => {
             transition={{ duration: (0.2 * index) % 2 }}
             key={movie.id}
           >
-            <div
+            <LazyLoadedImage
               className="grid-cell"
-              style={{
-                backgroundImage: `url(${IMAGE_URL}${movie.poster_path})`
-              }}
+              alt="movie poster"
+              src={`${IMAGE_URL}${movie.poster_path}`}
             >
               <div className="grid-read-more">
                 <button className="grid-cell-button">
@@ -92,7 +93,7 @@ const MovieGrid = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </LazyLoadedImage>
           </motion.div>
         ))}
     </div>

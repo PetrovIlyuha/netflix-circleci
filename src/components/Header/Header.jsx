@@ -27,7 +27,7 @@ export const HeaderLinks = [
   },
   {
     id: '129fj',
-    icon: 'fas fa-plus-square',
+    icon: 'fas fa-helicopter',
     content: 'Upcoming',
     apiCall: 'upcoming'
   }
@@ -54,7 +54,7 @@ const Header = () => {
     if (mobileMenu) setMobileMenu(false);
     const moviesPrevLoaded = localStorage.getItem(type);
     if (!moviesPrevLoaded) {
-      dispatch(getMoviesByType({ type, page }));
+      dispatch(getMoviesByType({ type, page: page }));
     } else if (!movies[type]) {
       const data = JSON.parse(localStorage.getItem(type));
       dispatch(setPreloadedData({ type, data }));

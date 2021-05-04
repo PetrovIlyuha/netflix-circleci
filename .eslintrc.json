@@ -24,6 +24,7 @@
   "rules": {
     "semi": [2, "always"],
     "indent": "off",
+    "multiline-ternary": "off",
     "space-before-function-paren": [
       0,
       { "anonymous": "always", "named": "always" }
