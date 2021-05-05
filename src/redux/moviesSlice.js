@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { API_URL, IMAGE_URL } from '../services/apiService/movies.service';
 
 let MOVIES_TYPE = '';
 
@@ -11,11 +12,10 @@ export const typeToTitleEnum = {
 
 export const getMoviesByType = createAsyncThunk(
   'movies/byType',
-  async (api_path) => {
-    MOVIES_TYPE = api_path;
-    const response = await fetch(
-      `${process.env.REACT_APP_MOVIE_DB_URL}/movie/${api_path}?api_key=${process.env.REACT_APP_MOVIE_DB_API_KEY}`
-    );
+  async ({ type }, thunkApi) => {
+    MOVIES_TYPE = type;
+    const nextPageToFetch = thunkApi.getState().movies.page;
+    const response = await API_URL(type, nextPageToFetch);
     return await response.json();
   }
 );
@@ -36,12 +36,16 @@ export const moviesReducer = createSlice({
     movies: {},
     apiError: '',
     loading: false,
-    currentlyShowing: '',
-    setGridIntoView: false
+    currentlyShowing: 'popular',
+    setGridIntoView: false,
+    currentSlideshowImages: [],
+    page: 1,
+    totalPages: 0
   },
   reducers: {
     setPreloadedData: (state, { payload: { type, data } }) => {
       state.movies[type] = data;
+      state.totalPages = data.total_pages;
     },
     setCurrentList: (state, { payload }) => {
       state.currentlyShowing = payload;
@@ -51,12 +55,23 @@ export const moviesReducer = createSlice({
     },
     clearScroller: (state, { payload }) => {
       state.setGridIntoView = false;
+    },
+    setPage: (state, { payload }) => {
+      state.page = payload;
     }
   },
   extraReducers: {
     [getMoviesByType.fulfilled]: (state, { payload }) => {
       state.movies[MOVIES_TYPE] = payload;
+      state.totalPages = payload.total_pages;
+      state.currentSlideshowImages = payload.results.map(
+        (img) => `${IMAGE_URL}${img.poster_path}`
+      );
       localStorage.setItem(MOVIES_TYPE, JSON.stringify(payload));
+      const saveByPageMarker = `type: ${MOVIES_TYPE}, page: ${state.page}`;
+      if (!localStorage.getItem(saveByPageMarker)) {
+        localStorage.setItem(saveByPageMarker, JSON.stringify(payload));
+      }
       state.loading = false;
     },
     [getMoviesByType.pending]: (state, { payload }) => {
@@ -73,7 +88,8 @@ export const {
   setPreloadedData,
   setCurrentList,
   setIntoView,
-  clearScroller
+  clearScroller,
+  setPage
 } = moviesReducer.actions;
 
 export default moviesReducer.reducer;
