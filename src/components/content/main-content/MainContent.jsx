@@ -26,7 +26,7 @@ const MainContent = () => {
           </motion.div>
         </AnimatePresence>
         <div className="pagination">
-          <Pagination />
+          <Pagination topPagination={true}/>
         </div>
       </div>
       <MovieGrid />
@@ -44,7 +44,7 @@ const MainContent = () => {
           </motion.div>
         </AnimatePresence>
         <div className="pagination">
-          <Pagination />
+          <Pagination topPagination={false}/>
         </div>
       </div>
     </div>
