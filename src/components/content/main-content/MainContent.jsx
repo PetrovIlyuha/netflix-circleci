@@ -30,6 +30,23 @@ const MainContent = () => {
         </div>
       </div>
       <MovieGrid />
+      <div className="grid-movie-titles">
+        <AnimatePresence exitBeforeEnter>
+          <motion.div
+            key={typeToTitleEnum[currentlyShowing]}
+            initial={{ opacity: 0.3, x: 130 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4 }}
+            exit={{ opacity: 0, x: -100 }}
+            className="movie-type"
+          >
+            {typeToTitleEnum[currentlyShowing]}
+          </motion.div>
+        </AnimatePresence>
+        <div className="pagination">
+          <Pagination />
+        </div>
+      </div>
     </div>
   );
 };

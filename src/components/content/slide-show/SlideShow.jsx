@@ -2,26 +2,23 @@ import React, { useState, useEffect } from 'react';
 import Indicators from './Indicators.jsx';
 import { CSSTransition } from 'react-transition-group';
 import './SlideShow.scss';
+import { useSelector } from 'react-redux';
+import { fallbackImagesFirstLoaded } from '../../../services/apiService/movies.service.js';
 
 const SlideShow = () => {
   // eslint-disable-next-line
-  const [images, setImages] = useState([
-    {
-      src:
-        'https://i0.wp.com/itc.ua/wp-content/uploads/2019/02/Dune_Concept_Art_Illustration_Eduardo_Pena-1.jpg?fit=1400%2C764&quality=100&strip=all&ssl=1',
-      index: 0
-    },
-    { src: 'https://i.ytimg.com/vi/xgbPSA94Rqg/maxresdefault.jpg', index: 1 },
-    {
-      src:
-        'https://ixbt.online/gametech/covers/2021/03/11/jKrFbZzjOhBdsRtOsvbPoqCblvxSkqIph87Odsnc.jpg?w=948',
-      index: 2
-    },
-    {
-      src: 'https://terrigen-cdn-dev.marvel.com/content/prod/1x/tagteam.jpg',
-      index: 3
+  const { currentlyShowing, page, currentSlideshowImages } = useSelector(
+    (state) => state.movies
+  );
+  const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    if (currentSlideshowImages.length) {
+      setImages(currentSlideshowImages.slice(0, 6));
+    } else {
+      setImages(fallbackImagesFirstLoaded.slice(0, 6));
     }
-  ]);
+  }, [currentlyShowing, page]);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [sliderAnimation, setSliderAnimation] = useState(false);
   const slideIndexRef = React.useRef(0);
@@ -33,7 +30,7 @@ const SlideShow = () => {
     }
     sliderRef.current = setInterval(() => {
       triggerSlideAnimation();
-      if (slideIndexRef.current === images.length - 1) {
+      if (slideIndexRef.current === 5) {
         slideIndexRef.current = 0;
         setCurrentSlideIndex(slideIndexRef.current);
       } else {
@@ -61,33 +58,29 @@ const SlideShow = () => {
     if (direction === 'prev' && slideIndexRef.current > 0) {
       slideIndexRef.current -= 1;
       setCurrentSlideIndex(slideIndexRef.current);
-      // triggerSlideAnimation();
     } else if (direction === 'prev' && slideIndexRef.current === 0) {
       slideIndexRef.current = images.length - 1;
       setCurrentSlideIndex(slideIndexRef.current);
-      // triggerSlideAnimation();
     } else if (
       direction === 'next' &&
       slideIndexRef.current < images.length - 1
     ) {
       slideIndexRef.current += 1;
       setCurrentSlideIndex(slideIndexRef.current);
-      // triggerSlideAnimation();
     } else if (
       direction === 'next' &&
       slideIndexRef.current === images.length - 1
     ) {
       slideIndexRef.current = 0;
       setCurrentSlideIndex(slideIndexRef.current);
-      // triggerSlideAnimation();
     }
   };
 
   return (
     <React.Fragment>
-      <div className="slider">
-        <div className="slider-slides">
-          {images.length > 0 && (
+      {images.length > 0 && (
+        <div className="slider">
+          <div className="slider-slides">
             <CSSTransition
               in={sliderAnimation}
               timeout={500}
@@ -96,24 +89,25 @@ const SlideShow = () => {
               <div
                 className="slider-image"
                 style={{
-                  backgroundImage: `url(${images[slideIndexRef.current].src})`
+                  backgroundImage: `url(${images[currentSlideIndex]})`,
+                  objectFit: 'cover'
                 }}
               />
             </CSSTransition>
-          )}
+          </div>
+          <Indicators currentSlide={currentSlideIndex} slides={images.length} />
+          <div className="slider-arrows">
+            <div
+              className="slider-arrow slider-arrow--left"
+              onClick={() => changeSlide('prev')}
+            />
+            <div
+              className="slider-arrow slider-arrow--right"
+              onClick={() => changeSlide('next')}
+            />
+          </div>
         </div>
-        <Indicators currentSlide={currentSlideIndex} slides={images.length} />
-        <div className="slider-arrows">
-          <div
-            className="slider-arrow slider-arrow--left"
-            onClick={() => changeSlide('prev')}
-          />
-          <div
-            className="slider-arrow slider-arrow--right"
-            onClick={() => changeSlide('next')}
-          />
-        </div>
-      </div>
+      )}
     </React.Fragment>
   );
 };

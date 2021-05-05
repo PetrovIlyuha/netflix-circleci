@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -9,14 +9,23 @@ import {
 } from '../../../redux/moviesSlice';
 import './MovieGrid.scss';
 import Rating from '../rating/Rating';
+import { IMAGE_URL } from '../../../services/apiService/movies.service';
+import LazyLoadedImage from '../../lazy-load/LazyLoadedImage';
 
-export const posterImageUrl = 'https://image.tmdb.org/t/p/original/';
 const MovieGrid = () => {
   const dispatch = useDispatch();
-  const { movies, currentlyShowing, setGridIntoView } = useSelector(
-    (state) => state.movies
-  );
+  const {
+    movies,
+    currentlyShowing,
+    setGridIntoView,
+    page: storedPage
+  } = useSelector((state) => state.movies);
   const gridRef = useRef();
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    setPage(storedPage);
+  }, [storedPage]);
 
   useEffect(() => {
     if (setGridIntoView) {
@@ -33,12 +42,14 @@ const MovieGrid = () => {
 
   useEffect(() => {
     dispatch(setCurrentList('popular'));
-    const popularMoviesLoaded = localStorage.getItem('popular');
+    const popularMoviesLoaded = localStorage.getItem('type: popular, page: 1');
     if (popularMoviesLoaded) {
-      const popularData = JSON.parse(localStorage.getItem('popular'));
+      const popularData = JSON.parse(
+        localStorage.getItem('type: popular, page: 1')
+      );
       dispatch(setPreloadedData({ type: 'popular', data: popularData }));
     } else {
-      dispatch(getMoviesByType('popular'));
+      dispatch(getMoviesByType({ type: 'popular', page }));
     }
   }, []);
   return (
@@ -51,11 +62,10 @@ const MovieGrid = () => {
             transition={{ duration: (0.2 * index) % 2 }}
             key={movie.id}
           >
-            <div
+            <LazyLoadedImage
               className="grid-cell"
-              style={{
-                backgroundImage: `url(${posterImageUrl}${movie.poster_path})`
-              }}
+              alt="movie poster"
+              src={`${IMAGE_URL}${movie.poster_path}`}
             >
               <div className="grid-read-more">
                 <button className="grid-cell-button">
@@ -65,7 +75,7 @@ const MovieGrid = () => {
               <div
                 className="grid-detail"
                 style={{
-                  backgroundImage: `url(${posterImageUrl}${movie.backdrop_path})`
+                  backgroundImage: `url(${IMAGE_URL}${movie.backdrop_path})`
                 }}
               >
                 <div className="grid-detail-overlay">
@@ -83,7 +93,7 @@ const MovieGrid = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </LazyLoadedImage>
           </motion.div>
         ))}
     </div>
