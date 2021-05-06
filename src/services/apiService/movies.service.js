@@ -9,6 +9,12 @@ export const API_URL = async (type, page) => {
   return response;
 };
 
+export const SEARCH_API_URL = async (searchTerm, page) => {
+  return await fetch(
+    `${INITIAL_REQUEST_URL}/search/movie/?api_key=${API_KEY}&language=en-US&query=${searchTerm}&page=${page}`
+  );
+};
+
 export const fallbackImagesFirstLoaded = [
   'https://image.tmdb.org/t/p/original//pgqgaUx1cJb5oZQQ5v0tNARCeBp.jpg',
   'https://image.tmdb.org/t/p/original//8yhtzsbBExY8mUct2GOk4LDDuGH.jpg',
