@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Header.scss';
 import logo from '../../logo.svg';
 import { motion } from 'framer-motion';
@@ -8,8 +8,10 @@ import {
   setCurrentList,
   setPage,
   setPreloadedData,
+  setSearchedToEmpty,
   triggerScrollToGrid
 } from '../../redux/moviesSlice';
+import { useThrottledDispatch } from '../../hooks/useThrottledDispatch';
 
 export const HeaderLinks = [
   {
@@ -41,12 +43,24 @@ const Header = () => {
   const [underlineClass, setUnderlineClass] = useState(
     'underlined_now_playing'
   );
+  const [searchTerm, setSearchTerm] = useState('');
 
   const toggleMobileMenu = () => {
     setMobileMenu((prev) => !prev);
   };
 
+  const throttledSearch = useThrottledDispatch();
+
+  const findMoviesFromUserInput = (e) => {
+    setSearchTerm(e.target.value);
+  };
+  useEffect(() => {
+    throttledSearch(searchTerm, 1);
+  }, [searchTerm]);
+
   const getDataAndSetStyle = (index, type) => {
+    dispatch(setSearchedToEmpty());
+    setSearchTerm('');
     dispatch(setPage(1));
     showUnderLineForMenuItem(index);
     dispatch(triggerScrollToGrid());
@@ -120,6 +134,8 @@ const Header = () => {
               type="search"
               className="search-input"
               placeholder="Search for a movie..."
+              value={searchTerm}
+              onChange={findMoviesFromUserInput}
             />
           </ul>
         </div>

@@ -18,7 +18,7 @@ const SlideShow = () => {
     } else {
       setImages(fallbackImagesFirstLoaded.slice(0, 6));
     }
-  }, [currentlyShowing, page]);
+  }, [currentlyShowing, page, currentSlideshowImages]);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [sliderAnimation, setSliderAnimation] = useState(false);
   const slideIndexRef = React.useRef(0);
