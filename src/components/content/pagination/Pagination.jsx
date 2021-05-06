@@ -3,17 +3,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   getMoviesByType,
+  searchMovie,
   setPage,
   setPreloadedData,
   triggerScrollToGrid
 } from '../../../redux/moviesSlice';
 import './Pagination.scss';
 
-const Pagination = ({ topPagination }) => {
+const Pagination = ({ topPagination, isSearchMode }) => {
+  console.log(isSearchMode);
   const dispatch = useDispatch();
-  const { page, movies, currentlyShowing, totalPages } = useSelector(
-    (state) => state.movies
-  );
+  const {
+    page,
+    movies,
+    currentlyShowing,
+    totalPages,
+    searchWord
+  } = useSelector((state) => state.movies);
 
   const totalPagesPagination =
     movies[currentlyShowing] !== undefined
@@ -39,7 +45,11 @@ const Pagination = ({ topPagination }) => {
               })
             );
           } else {
-            dispatch(getMoviesByType({ type: currentlyShowing }));
+            if (isSearchMode) {
+              dispatch(searchMovie(searchWord));
+            } else {
+              dispatch(getMoviesByType({ type: currentlyShowing }));
+            }
           }
         }
         break;
@@ -59,7 +69,12 @@ const Pagination = ({ topPagination }) => {
               })
             );
           } else {
-            dispatch(getMoviesByType({ type: currentlyShowing }));
+            if (isSearchMode) {
+              console.log('seaech next');
+              dispatch(searchMovie(searchWord));
+            } else {
+              dispatch(getMoviesByType({ type: currentlyShowing }));
+            }
           }
         }
         break;
@@ -91,7 +106,8 @@ const Pagination = ({ topPagination }) => {
 };
 
 Pagination.propTypes = {
-  topPagination: PropTypes.bool
+  topPagination: PropTypes.bool,
+  isSearchMode: PropTypes.bool
 };
 
 export default Pagination;
