@@ -2,7 +2,6 @@ import { motion } from 'framer-motion';
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import './SearchGrid.scss';
 import '../movieGrid/MovieGrid.scss';
 import Rating from '../rating/Rating';
 import { IMAGE_URL } from '../../../services/apiService/movies.service';
