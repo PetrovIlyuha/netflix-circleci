@@ -13,7 +13,7 @@ export const API_URL = async (type, page) => {
 
 export const SEARCH_API_URL = async (searchTerm, page) => {
   return await fetch(
-    `${INITIAL_REQUEST_URL}/search/movie/?api_key=${API_KEY}&language=en-US&query=${searchTerm}&page=${page}`
+    `${INITIAL_REQUEST_URL}/search/movie?api_key=${API_KEY}&language=en-US&query=${searchTerm}&page=${page}`
   );
 };
 

@@ -11,7 +11,6 @@ import {
 import './Pagination.scss';
 
 const Pagination = ({ topPagination, isSearchMode }) => {
-  console.log(isSearchMode);
   const dispatch = useDispatch();
   const {
     page,
