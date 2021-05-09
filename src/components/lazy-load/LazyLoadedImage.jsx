@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 const LazyLoadedImage = ({ src, alt, children, className }) => {
   const [image, setImage] = useState(ImagePlaceholder2);
   const [imageRef, setImageRef] = useState();
-
   useEffect(() => {
     let observer;
     let didCancel = false;
@@ -59,7 +58,8 @@ LazyLoadedImage.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]).isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
+  movieId: PropTypes.number
 };
 
 export default LazyLoadedImage;
