@@ -60,8 +60,7 @@ const Header = () => {
   useEffect(() => {
     throttledSearch(searchTerm, 1);
   }, [searchTerm]);
-  // console.log(`${IMAGE_URL}${movies[currentlyShowing][0].backdrop_path}`);
-  console.log(movies[currentlyShowing]?.results[0].backdrop_path);
+
   const getDataAndSetStyle = (index, type) => {
     dispatch(setSearchedToEmpty());
     setSearchTerm('');
@@ -111,7 +110,7 @@ const Header = () => {
             }
             style={{
               background: mobileMenu
-                ? `url(${IMAGE_URL}${movies[currentlyShowing]?.results[0].backdrop_path})`
+                ? `url(${IMAGE_URL}${movies[currentlyShowing].results[0].backdrop_path})`
                 : '',
               backgroundSize: 'cover',
               backgroundPosition: 'center center',
