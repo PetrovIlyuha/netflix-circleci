@@ -1,13 +1,21 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { API_URL, IMAGE_URL } from '../services/apiService/movies.service';
-
+import {
+  API_URL,
+  IMAGE_URL,
+  SEARCH_API_URL,
+  fallbackImagesFirstLoaded,
+  GET_MOVIE_VIDEOS,
+  GET_YOUTUBE_PREVIEW
+} from '../services/apiService/movies.service';
 let MOVIES_TYPE = '';
+
+// const setSearchWord = createAction('SET_SEARCH_WORD');
 
 export const typeToTitleEnum = {
   popular: 'Most Popular on the Planet',
   top_rated: 'Most appeciated by critics and wide audience',
   upcoming: 'Anticipated movies currently in production',
-  now_playing: 'Now Showing in Cinema'
+  now_playing: 'Now Showing in Cinemas'
 };
 
 export const getMoviesByType = createAsyncThunk(
@@ -19,6 +27,29 @@ export const getMoviesByType = createAsyncThunk(
     return await response.json();
   }
 );
+
+export const searchMovie = createAsyncThunk(
+  'movies/search',
+  async (searchTerm, thunkApi) => {
+    thunkApi.dispatch(setSearchWord(searchTerm));
+    if (searchTerm.length === 0) {
+      thunkApi.dispatch(setSearchedToEmpty());
+    }
+    const nextPageToFetch = thunkApi.getState().movies.page;
+    const response = await SEARCH_API_URL(searchTerm, nextPageToFetch);
+    return await response.json();
+  }
+);
+
+export const getMovieVideos = createAsyncThunk('movie/videos', async (id) => {
+  const response = await GET_MOVIE_VIDEOS(id);
+  const data = await response.json();
+  const movie_youtube_key = data.results.find(
+    (movie) => movie.site === 'YouTube'
+  ).key;
+  const youtube_response = await GET_YOUTUBE_PREVIEW(movie_youtube_key);
+  return await youtube_response.json();
+});
 
 export const triggerScrollToGrid = () => async (dispatch) => {
   dispatch(setIntoView());
@@ -40,7 +71,15 @@ export const moviesReducer = createSlice({
     setGridIntoView: false,
     currentSlideshowImages: [],
     page: 1,
-    totalPages: 0
+    totalPages: 0,
+    searchedMovies: [],
+    searchError: null,
+    totalSearchResults: 0,
+    searchWord: '',
+    youtubeVideo: null,
+    loadingThumbnailVideo: false,
+    loadingThumbnailVideoError: null,
+    hoveredMovieGridIndex: null
   },
   reducers: {
     setPreloadedData: (state, { payload: { type, data } }) => {
@@ -58,6 +97,22 @@ export const moviesReducer = createSlice({
     },
     setPage: (state, { payload }) => {
       state.page = payload;
+    },
+    setSearchWord: (state, { payload }) => {
+      state.searchWord = payload;
+    },
+    setSearchedToEmpty: (state, { payload }) => {
+      state.searchedMovies = [];
+      state.currentSlideshowImages = fallbackImagesFirstLoaded.slice(0, 6);
+    },
+    nullifyYoutubeVideoID: (state, { payload }) => {
+      state.youtubeVideo = null;
+    },
+    setHoveredMovieGridIndex: (state, { payload }) => {
+      state.hoveredMovieGridIndex = payload;
+    },
+    removeHoveredMovieGridIndex: (state, { payload }) => {
+      state.hoveredMovieGridIndex = null;
     }
   },
   extraReducers: {
@@ -80,6 +135,32 @@ export const moviesReducer = createSlice({
     [getMoviesByType.rejected]: (state, { payload }) => {
       state.apiError = payload;
       state.loading = false;
+    },
+    [searchMovie.fulfilled]: (state, { payload }) => {
+      state.searchedMovies = payload.results;
+      state.loading = false;
+      state.totalPages = payload.total_pages;
+      state.totalSearchResults = payload.total_results;
+      state.currentSlideshowImages = payload.results.map(
+        (img) => `${IMAGE_URL}${img.poster_path}`
+      );
+    },
+    [searchMovie.pending]: (state, { payload }) => {
+      state.loading = true;
+    },
+    [searchMovie.rejected]: (state, { payload }) => {
+      state.searchError = payload;
+      state.loading = false;
+    },
+    [getMovieVideos.fulfilled]: (state, { payload }) => {
+      state.youtubeVideo = payload;
+      state.loadingThumbnailVideo = false;
+    },
+    [getMovieVideos.pending]: (state, { payload }) => {
+      state.loadingThumbnailVideo = true;
+    },
+    [getMovieVideos.rejected]: (state, { payload }) => {
+      state.loadingThumbnailVideoError = payload;
     }
   }
 });
@@ -89,7 +170,12 @@ export const {
   setCurrentList,
   setIntoView,
   clearScroller,
-  setPage
+  setPage,
+  setSearchWord,
+  setSearchedToEmpty,
+  nullifyYoutubeVideoID,
+  setHoveredMovieGridIndex,
+  removeHoveredMovieGridIndex
 } = moviesReducer.actions;
 
 export default moviesReducer.reducer;

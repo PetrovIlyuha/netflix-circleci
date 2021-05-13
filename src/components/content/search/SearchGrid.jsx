@@ -1,36 +1,26 @@
 import { motion } from 'framer-motion';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  getMoviesByType,
-  getMovieVideos,
-  setCurrentList,
-  setPreloadedData,
-  setHoveredMovieGridIndex,
-  removeHoveredMovieGridIndex
-} from '../../../redux/moviesSlice';
-import './MovieGrid.scss';
+import '../movieGrid/MovieGrid.scss';
 import Rating from '../rating/Rating';
 import { IMAGE_URL } from '../../../services/apiService/movies.service';
 import LazyLoadedImage from '../../lazy-load/LazyLoadedImage';
+import {
+  getMovieVideos,
+  removeHoveredMovieGridIndex,
+  setHoveredMovieGridIndex
+} from '../../../redux/moviesSlice';
 
-const MovieGrid = () => {
-  const dispatch = useDispatch();
+const SearchGrid = () => {
   const {
-    movies,
-    currentlyShowing,
+    searchedMovies,
     setGridIntoView,
-    page: storedPage,
-    youtubeVideo,
-    hoveredMovieGridIndex
+    hoveredMovieGridIndex,
+    youtubeVideo
   } = useSelector((state) => state.movies);
+  const dispatch = useDispatch();
   const gridRef = useRef();
-  const [page, setPage] = useState(1);
-
-  useEffect(() => {
-    setPage(storedPage);
-  }, [storedPage]);
 
   useEffect(() => {
     if (setGridIntoView) {
@@ -45,22 +35,10 @@ const MovieGrid = () => {
     }
   }, [setGridIntoView]);
 
-  useEffect(() => {
-    dispatch(setCurrentList('popular'));
-    const popularMoviesLoaded = localStorage.getItem('type: popular, page: 1');
-    if (popularMoviesLoaded) {
-      const popularData = JSON.parse(
-        localStorage.getItem('type: popular, page: 1')
-      );
-      dispatch(setPreloadedData({ type: 'popular', data: popularData }));
-    } else {
-      dispatch(getMoviesByType({ type: 'popular', page }));
-    }
-  }, []);
   return (
     <div className="grid" ref={gridRef}>
-      {movies[currentlyShowing] &&
-        movies[currentlyShowing].results.map((movie, index) => {
+      {searchedMovies.length > 0 &&
+        searchedMovies.map((movie, index) => {
           return index === hoveredMovieGridIndex && youtubeVideo ? (
             <motion.div
               initial={{ opacity: 0, x: -100, y: 100, rotateY: 90 }}
@@ -137,4 +115,4 @@ const MovieGrid = () => {
   );
 };
 
-export default MovieGrid;
+export default SearchGrid;
