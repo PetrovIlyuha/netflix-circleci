@@ -12,6 +12,7 @@ import {
   triggerScrollToGrid
 } from '../../redux/moviesSlice';
 import { useThrottledDispatch } from '../../hooks/useThrottledDispatch';
+import { IMAGE_URL } from '../../services/apiService/movies.service';
 
 export const HeaderLinks = [
   {
@@ -37,7 +38,9 @@ export const HeaderLinks = [
 
 const Header = () => {
   const dispatch = useDispatch();
-  const { movies, page } = useSelector((state) => state.movies);
+  const { movies, page, currentlyShowing } = useSelector(
+    (state) => state.movies
+  );
   const [mobileMenu, setMobileMenu] = useState(false);
   const [underlineIndex, setUnderlineIndex] = useState(null);
   const [underlineClass, setUnderlineClass] = useState(
@@ -57,7 +60,8 @@ const Header = () => {
   useEffect(() => {
     throttledSearch(searchTerm, 1);
   }, [searchTerm]);
-
+  // console.log(`${IMAGE_URL}${movies[currentlyShowing][0].backdrop_path}`);
+  console.log(movies[currentlyShowing]?.results[0].backdrop_path);
   const getDataAndSetStyle = (index, type) => {
     dispatch(setSearchedToEmpty());
     setSearchTerm('');
@@ -105,6 +109,14 @@ const Header = () => {
             className={
               mobileMenu ? 'header-nav header-mobile-nav' : 'header-nav'
             }
+            style={{
+              background: mobileMenu
+                ? `url(${IMAGE_URL}${movies[currentlyShowing]?.results[0].backdrop_path})`
+                : '',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center center',
+              backgroundRepeat: 'no-repeat'
+            }}
           >
             {HeaderLinks.map((link) => (
               <li

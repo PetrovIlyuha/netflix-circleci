@@ -69,7 +69,6 @@ const Pagination = ({ topPagination, isSearchMode }) => {
             );
           } else {
             if (isSearchMode) {
-              console.log('seaech next');
               dispatch(searchMovie(searchWord));
             } else {
               dispatch(getMoviesByType({ type: currentlyShowing }));
