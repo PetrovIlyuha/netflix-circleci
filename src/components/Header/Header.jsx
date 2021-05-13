@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Header.scss';
 import logo from '../../logo.svg';
 import { motion } from 'framer-motion';
@@ -8,8 +8,11 @@ import {
   setCurrentList,
   setPage,
   setPreloadedData,
+  setSearchedToEmpty,
   triggerScrollToGrid
 } from '../../redux/moviesSlice';
+import { useThrottledDispatch } from '../../hooks/useThrottledDispatch';
+import { IMAGE_URL } from '../../services/apiService/movies.service';
 
 export const HeaderLinks = [
   {
@@ -35,18 +38,32 @@ export const HeaderLinks = [
 
 const Header = () => {
   const dispatch = useDispatch();
-  const { movies, page } = useSelector((state) => state.movies);
+  const { movies, page, currentlyShowing } = useSelector(
+    (state) => state.movies
+  );
   const [mobileMenu, setMobileMenu] = useState(false);
   const [underlineIndex, setUnderlineIndex] = useState(null);
   const [underlineClass, setUnderlineClass] = useState(
     'underlined_now_playing'
   );
+  const [searchTerm, setSearchTerm] = useState('');
 
   const toggleMobileMenu = () => {
     setMobileMenu((prev) => !prev);
   };
 
+  const throttledSearch = useThrottledDispatch();
+
+  const findMoviesFromUserInput = (e) => {
+    setSearchTerm(e.target.value);
+  };
+  useEffect(() => {
+    throttledSearch(searchTerm, 1);
+  }, [searchTerm]);
+
   const getDataAndSetStyle = (index, type) => {
+    dispatch(setSearchedToEmpty());
+    setSearchTerm('');
     dispatch(setPage(1));
     showUnderLineForMenuItem(index);
     dispatch(triggerScrollToGrid());
@@ -91,6 +108,14 @@ const Header = () => {
             className={
               mobileMenu ? 'header-nav header-mobile-nav' : 'header-nav'
             }
+            style={{
+              background: mobileMenu
+                ? `url(${IMAGE_URL}${movies[currentlyShowing].results[0].backdrop_path})`
+                : '',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center center',
+              backgroundRepeat: 'no-repeat'
+            }}
           >
             {HeaderLinks.map((link) => (
               <li
@@ -120,6 +145,8 @@ const Header = () => {
               type="search"
               className="search-input"
               placeholder="Search for a movie..."
+              value={searchTerm}
+              onChange={findMoviesFromUserInput}
             />
           </ul>
         </div>

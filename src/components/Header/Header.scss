@@ -198,23 +198,27 @@
 
 .search-input {
   grid-area: search;
-  margin-top: 10px;
+  margin-top: 6px;
   width: auto;
   border: 1px solid #9aa9bb;
-  padding: 5px;
-  height: 36px;
+  padding: 5px 0px 8px 0px;
+  height: 32px;
   border-radius: 5px;
   outline: none;
-  color: #9dbfaf;
-  line-height: 36px;
+  color: #498368;
+  line-height: 32px;
+  font-weight: 700;
 }
 
+.search-input::placeholder {
+  font-weight: 700;
+}
 .disabled {
   display: none;
 }
 
 ::-webkit-input-placeholder {
-  color: #9aa9bb;
+  color: #9da7b3;
   font-size: 14px;
 }
 

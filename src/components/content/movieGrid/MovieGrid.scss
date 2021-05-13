@@ -24,10 +24,24 @@
   background-position: center center;
   background-repeat: no-repeat;
   filter: grayscale(0.3);
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+  }
   &:hover {
     box-shadow: 3px 3px 14px rgba(240, 240, 240, 0.5);
     transform: scale(1.01) translateX(-2px) translateY(-3px);
     filter: grayscale(0);
+    .videoPreviewIcon {
+      display: block;
+    }
     .grid-read-more {
       .grid-cell-button {
         display: block;
@@ -37,6 +51,35 @@
     .grid-detail {
       opacity: 1;
     }
+  }
+  .videoPreviewIcon {
+    margin-bottom: 2rem;
+    font-size: 3rem;
+    color: yellow;
+    display: none;
+    width: 10%;
+    margin: 0 auto 2rem;
+    padding-right: 12%;
+    transition: all 0.2s ease-in;
+    position: relative;
+    &:hover {
+      transform: scale(1.1);
+      &::before {
+        display: block;
+        top: -95px;
+      }
+    }
+  }
+  .videoPreviewIcon::before {
+    content: 'Watch YouTube Trailer';
+    font-size: 1.2rem;
+    position: absolute;
+    top: -100px;
+    left: -18%;
+    padding: 10px;
+    border-radius: 5%;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: none;
   }
   .grid-read-more {
     display: flex;

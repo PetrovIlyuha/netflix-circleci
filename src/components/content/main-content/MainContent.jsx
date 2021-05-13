@@ -4,11 +4,17 @@ import { useSelector } from 'react-redux';
 import { typeToTitleEnum } from '../../../redux/moviesSlice';
 import MovieGrid from '../movieGrid/MovieGrid';
 import Pagination from '../pagination/Pagination';
+import SearchGrid from '../search/SearchGrid';
 import SlideShow from '../slide-show/SlideShow';
 import './MainContent.scss';
 
 const MainContent = () => {
-  const { currentlyShowing } = useSelector((state) => state.movies);
+  const {
+    currentlyShowing,
+    searchedMovies,
+    searchWord,
+    totalSearchResults
+  } = useSelector((state) => state.movies);
   return (
     <div className="main-content">
       <SlideShow />
@@ -22,14 +28,23 @@ const MainContent = () => {
             exit={{ opacity: 0, x: -100 }}
             className="movie-type"
           >
-            {typeToTitleEnum[currentlyShowing]}
+            {searchedMovies.length > 0
+              ? `We've found ${totalSearchResults} movies for "${searchWord}"`
+              : typeToTitleEnum[currentlyShowing]}
           </motion.div>
         </AnimatePresence>
         <div className="pagination">
-          <Pagination />
+          <Pagination
+            topPagination={true}
+            isSearchMode={!!searchedMovies.length}
+          />
         </div>
       </div>
-      <MovieGrid />
+      {searchedMovies && searchedMovies.length > 0 ? (
+        <SearchGrid />
+      ) : (
+        <MovieGrid />
+      )}
       <div className="grid-movie-titles">
         <AnimatePresence exitBeforeEnter>
           <motion.div
@@ -43,9 +58,11 @@ const MainContent = () => {
             {typeToTitleEnum[currentlyShowing]}
           </motion.div>
         </AnimatePresence>
-        <div className="pagination">
-          <Pagination />
-        </div>
+        {!searchedMovies.length && (
+          <div className="pagination">
+            <Pagination topPagination={false} />
+          </div>
+        )}
       </div>
     </div>
   );

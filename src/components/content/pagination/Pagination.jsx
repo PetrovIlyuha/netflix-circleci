@@ -1,18 +1,24 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import {
   getMoviesByType,
+  searchMovie,
   setPage,
   setPreloadedData,
   triggerScrollToGrid
 } from '../../../redux/moviesSlice';
 import './Pagination.scss';
 
-const Pagination = () => {
+const Pagination = ({ topPagination, isSearchMode }) => {
   const dispatch = useDispatch();
-  const { page, movies, currentlyShowing, totalPages } = useSelector(
-    (state) => state.movies
-  );
+  const {
+    page,
+    movies,
+    currentlyShowing,
+    totalPages,
+    searchWord
+  } = useSelector((state) => state.movies);
 
   const totalPagesPagination =
     movies[currentlyShowing] !== undefined
@@ -25,7 +31,9 @@ const Pagination = () => {
       case 'prev':
         if (page >= 1) {
           dispatch(setPage(page - 1));
-          dispatch(triggerScrollToGrid());
+          if (!topPagination) {
+            dispatch(triggerScrollToGrid());
+          }
           const dataMarker = `type: ${currentlyShowing}, page: ${page}`;
           if (localStorage.getItem(dataMarker)) {
             const retrievedData = JSON.parse(localStorage.getItem(dataMarker));
@@ -36,14 +44,20 @@ const Pagination = () => {
               })
             );
           } else {
-            dispatch(getMoviesByType({ type: currentlyShowing }));
+            if (isSearchMode) {
+              dispatch(searchMovie(searchWord));
+            } else {
+              dispatch(getMoviesByType({ type: currentlyShowing }));
+            }
           }
         }
         break;
       case 'next':
         if (page < totalPages) {
           dispatch(setPage(page + 1));
-          dispatch(triggerScrollToGrid());
+          if (!topPagination) {
+            dispatch(triggerScrollToGrid());
+          }
           const dataMarker = `type: ${currentlyShowing}, page: ${page}`;
           if (localStorage.getItem(dataMarker)) {
             const retrievedData = JSON.parse(localStorage.getItem(dataMarker));
@@ -54,7 +68,11 @@ const Pagination = () => {
               })
             );
           } else {
-            dispatch(getMoviesByType({ type: currentlyShowing }));
+            if (isSearchMode) {
+              dispatch(searchMovie(searchWord));
+            } else {
+              dispatch(getMoviesByType({ type: currentlyShowing }));
+            }
           }
         }
         break;
@@ -83,6 +101,11 @@ const Pagination = () => {
       </button>
     </React.Fragment>
   );
+};
+
+Pagination.propTypes = {
+  topPagination: PropTypes.bool,
+  isSearchMode: PropTypes.bool
 };
 
 export default Pagination;
