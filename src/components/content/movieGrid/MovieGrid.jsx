@@ -103,11 +103,11 @@ const MovieGrid = () => {
                     }}
                   ></i>
                 </div>
-                <div className="grid-read-more">
-                  <button className="grid-cell-button">
-                    <Link to="/">Read More</Link>
-                  </button>
-                </div>
+                <Link to={`/movie/${movie.id}`}>
+                  <div className="grid-read-more">
+                    <button className="grid-cell-button">Read More</button>
+                  </div>
+                </Link>
                 <div
                   className="grid-detail"
                   style={{
