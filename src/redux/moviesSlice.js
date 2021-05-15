@@ -5,11 +5,10 @@ import {
   SEARCH_API_URL,
   fallbackImagesFirstLoaded,
   GET_MOVIE_VIDEOS,
-  GET_YOUTUBE_PREVIEW
+  GET_YOUTUBE_PREVIEW,
+  GET_MOVIE_DETAILS
 } from '../services/apiService/movies.service';
 let MOVIES_TYPE = '';
-
-// const setSearchWord = createAction('SET_SEARCH_WORD');
 
 export const typeToTitleEnum = {
   popular: 'Most Popular on the Planet',
@@ -51,6 +50,28 @@ export const getMovieVideos = createAsyncThunk('movie/videos', async (id) => {
   return await youtube_response.json();
 });
 
+export const getAllMovieVideos = createAsyncThunk(
+  'movie/all-videos',
+  async (id) => {
+    const response = await GET_MOVIE_VIDEOS(id);
+    const data = await response.json();
+    const links = data.results;
+    const allVideos = [];
+    for await (const link of links) {
+      const nextYoutubeVideo = await (
+        await GET_YOUTUBE_PREVIEW(link.key)
+      ).json();
+      allVideos.push(nextYoutubeVideo);
+    }
+    return allVideos;
+  }
+);
+
+export const getMovieDetails = createAsyncThunk('movie/details', async (id) => {
+  const response = await GET_MOVIE_DETAILS(id);
+  return await response.json();
+});
+
 export const triggerScrollToGrid = () => async (dispatch) => {
   dispatch(setIntoView());
   await new Promise((resolve) => {
@@ -77,6 +98,10 @@ export const moviesReducer = createSlice({
     totalSearchResults: 0,
     searchWord: '',
     youtubeVideo: null,
+    movieDetails: null,
+    movieDetailsError: null,
+    errorLoadingAllVideos: null,
+    allMovieTrailers: [],
     loadingThumbnailVideo: false,
     loadingThumbnailVideoError: null,
     hoveredMovieGridIndex: null
@@ -161,6 +186,28 @@ export const moviesReducer = createSlice({
     },
     [getMovieVideos.rejected]: (state, { payload }) => {
       state.loadingThumbnailVideoError = payload;
+    },
+    [getMovieDetails.pending]: (state, { payload }) => {
+      state.loading = true;
+    },
+    [getMovieDetails.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.movieDetailsError = payload;
+    },
+    [getMovieDetails.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.movieDetails = payload;
+    },
+    [getAllMovieVideos.pending]: (state, { payload }) => {
+      state.loading = true;
+    },
+    [getAllMovieVideos.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.errorLoadingAllVideos = payload;
+    },
+    [getAllMovieVideos.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.allMovieTrailers = payload;
     }
   }
 });
