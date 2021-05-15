@@ -58,11 +58,14 @@ const Header = () => {
     setSearchTerm(e.target.value);
   };
   useEffect(() => {
-    throttledSearch(searchTerm, 1);
+    if (searchTerm.length) {
+      throttledSearch(searchTerm, 1);
+    }
   }, [searchTerm]);
 
   const getDataAndSetStyle = (index, type) => {
     dispatch(setSearchedToEmpty());
+    window.location.replace('/');
     setSearchTerm('');
     dispatch(setPage(1));
     showUnderLineForMenuItem(index);
@@ -77,6 +80,10 @@ const Header = () => {
       dispatch(setPreloadedData({ type, data }));
     }
   };
+
+  const forwardToHomePage = () => {
+    window.location.replace('/');
+  };
   const showUnderLineForMenuItem = (index) => {
     const className = HeaderLinks.find((l) => l.id === index).apiCall;
     setUnderlineClass('underlined' + `_${className}`);
@@ -87,7 +94,7 @@ const Header = () => {
       <div className="header-nav-wrapper">
         <div className="header-bar"></div>
         <div className="header-navbar">
-          <div className="header-image">
+          <div className="header-image" onClick={forwardToHomePage}>
             <img src={logo} alt="logo" />
             <h3>NetFlux</h3>
           </div>
