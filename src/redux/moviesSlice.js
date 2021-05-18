@@ -147,11 +147,6 @@ export const moviesReducer = createSlice({
       state.currentSlideshowImages = payload.results.map(
         (img) => `${IMAGE_URL}${img.poster_path}`
       );
-      localStorage.setItem(MOVIES_TYPE, JSON.stringify(payload));
-      const saveByPageMarker = `type: ${MOVIES_TYPE}, page: ${state.page}`;
-      if (!localStorage.getItem(saveByPageMarker)) {
-        localStorage.setItem(saveByPageMarker, JSON.stringify(payload));
-      }
       state.loading = false;
     },
     [getMoviesByType.pending]: (state, { payload }) => {

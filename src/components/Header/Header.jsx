@@ -7,7 +7,6 @@ import {
   getMoviesByType,
   setCurrentList,
   setPage,
-  setPreloadedData,
   setSearchedToEmpty,
   triggerScrollToGrid
 } from '../../redux/moviesSlice';
@@ -65,20 +64,13 @@ const Header = () => {
 
   const getDataAndSetStyle = (index, type) => {
     dispatch(setSearchedToEmpty());
-    window.location.replace('/');
     setSearchTerm('');
     dispatch(setPage(1));
     showUnderLineForMenuItem(index);
     dispatch(triggerScrollToGrid());
     dispatch(setCurrentList(type));
     if (mobileMenu) setMobileMenu(false);
-    const moviesPrevLoaded = localStorage.getItem(type);
-    if (!moviesPrevLoaded) {
-      dispatch(getMoviesByType({ type, page: page }));
-    } else if (!movies[type]) {
-      const data = JSON.parse(localStorage.getItem(type));
-      dispatch(setPreloadedData({ type, data }));
-    }
+    dispatch(getMoviesByType({ type, page: page }));
   };
 
   const forwardToHomePage = () => {
