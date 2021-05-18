@@ -16,7 +16,9 @@ const Tab = ({ activeTab, label, onClick }) => {
         'tab-list-active': activeTab === label
       })}
       onClick={onTabClick}
-    >{label}</li>
+    >
+      {label}
+    </li>
   );
 };
 

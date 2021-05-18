@@ -1,0 +1,29 @@
+.tabs {
+  text-align: left;
+  color: white;
+  margin-top: -128px;
+}
+
+.tab-list {
+  padding-left: 0;
+  display: flex;
+  width: 40vw;
+  justify-content: space-between;
+}
+
+@media (max-width: 700px) {
+  .tab-list {
+    width: 19vw;
+  }
+
+  .tab-list-item {
+    display: block;
+    font-size: 13px;
+    text-align: left;
+  }
+
+  .tab-list-active {
+    color: #dcf836;
+    border-bottom: none;
+  }
+}
