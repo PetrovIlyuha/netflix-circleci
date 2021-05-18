@@ -6,6 +6,7 @@ import { getAllMovieVideos, getMovieDetails } from '../../../redux/moviesSlice';
 import { IMAGE_URL } from '../../../services/apiService/movies.service';
 import Rating from '../rating/Rating';
 import './MovieDetails.scss';
+import Tabs from './tabs/Tabs';
 
 const MovieDetails = () => {
   const { id } = useParams();
@@ -85,21 +86,32 @@ const MovieDetails = () => {
               </div>
             </div>
           </div>
+          <div className="tabs-section">
+            <Tabs>
+              <div label="Overview">Overview</div>
+              <div label="Crew">Crew</div>
+              <div label="Media">In Media</div>
+              <div label="Reviews">Reviews</div>
+            </Tabs>
+          </div>
         </div>
-        <div className="movie-trailers">
-          {allMovieTrailers.length > 0 &&
-            allMovieTrailers.map((trailer, index) => {
-              return (
-                <iframe
-                  key={index}
-                  autoPlay={true}
-                  src={`https://www.youtube.com/embed/${trailer.items[0].id}`}
-                  frameBorder="0"
-                />
-              );
-            })}
+        <div>
+          <h2 className="trailers-heading">All Available Movie Trailers</h2>
+          <div className="movie-trailers">
+            {allMovieTrailers.length > 0 &&
+              allMovieTrailers.map((trailer, index) => {
+                return (
+                  <iframe
+                    key={index}
+                    autoPlay={true}
+                    src={`https://www.youtube.com/embed/${trailer.items[0].id}`}
+                    frameBorder="0"
+                  />
+                );
+              })}
+          </div>
         </div>
-        {movieDetails && JSON.stringify(movieDetails)}
+        {/* {movieDetails && JSON.stringify(movieDetails)} */}
       </div>
     )
   );
