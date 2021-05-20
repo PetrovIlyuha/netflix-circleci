@@ -5,7 +5,6 @@ import {
   getMoviesByType,
   searchMovie,
   setPage,
-  setPreloadedData,
   triggerScrollToGrid
 } from '../../../redux/moviesSlice';
 import './Pagination.scss';
@@ -34,21 +33,10 @@ const Pagination = ({ topPagination, isSearchMode }) => {
           if (!topPagination) {
             dispatch(triggerScrollToGrid());
           }
-          const dataMarker = `type: ${currentlyShowing}, page: ${page}`;
-          if (localStorage.getItem(dataMarker)) {
-            const retrievedData = JSON.parse(localStorage.getItem(dataMarker));
-            dispatch(
-              setPreloadedData({
-                type: currentlyShowing,
-                data: retrievedData
-              })
-            );
+          if (isSearchMode) {
+            dispatch(searchMovie(searchWord));
           } else {
-            if (isSearchMode) {
-              dispatch(searchMovie(searchWord));
-            } else {
-              dispatch(getMoviesByType({ type: currentlyShowing }));
-            }
+            dispatch(getMoviesByType({ type: currentlyShowing }));
           }
         }
         break;
@@ -58,21 +46,10 @@ const Pagination = ({ topPagination, isSearchMode }) => {
           if (!topPagination) {
             dispatch(triggerScrollToGrid());
           }
-          const dataMarker = `type: ${currentlyShowing}, page: ${page}`;
-          if (localStorage.getItem(dataMarker)) {
-            const retrievedData = JSON.parse(localStorage.getItem(dataMarker));
-            dispatch(
-              setPreloadedData({
-                type: currentlyShowing,
-                data: retrievedData
-              })
-            );
+          if (isSearchMode) {
+            dispatch(searchMovie(searchWord));
           } else {
-            if (isSearchMode) {
-              dispatch(searchMovie(searchWord));
-            } else {
-              dispatch(getMoviesByType({ type: currentlyShowing }));
-            }
+            dispatch(getMoviesByType({ type: currentlyShowing }));
           }
         }
         break;

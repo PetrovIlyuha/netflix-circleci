@@ -28,6 +28,12 @@ export const GET_YOUTUBE_PREVIEW = async (youtubeMovideId) => {
     `${YOUTUBE_URL}?id=${youtubeMovideId}&key=${GOOGLE_YOUTUBE_KEY}&part=snippet,contentDetails,statistics,status,player`
   );
 };
+
+export const GET_MOVIE_DETAILS = async (id) => {
+  return await fetch(
+    `${INITIAL_REQUEST_URL}/movie/${id}?api_key=${API_KEY}&language=en-US`
+  );
+};
 export const fallbackImagesFirstLoaded = [
   'https://image.tmdb.org/t/p/original//pgqgaUx1cJb5oZQQ5v0tNARCeBp.jpg',
   'https://image.tmdb.org/t/p/original//8yhtzsbBExY8mUct2GOk4LDDuGH.jpg',

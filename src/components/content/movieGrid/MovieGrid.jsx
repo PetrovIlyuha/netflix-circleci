@@ -6,7 +6,6 @@ import {
   getMoviesByType,
   getMovieVideos,
   setCurrentList,
-  setPreloadedData,
   setHoveredMovieGridIndex,
   removeHoveredMovieGridIndex
 } from '../../../redux/moviesSlice';
@@ -47,15 +46,7 @@ const MovieGrid = () => {
 
   useEffect(() => {
     dispatch(setCurrentList('popular'));
-    const popularMoviesLoaded = localStorage.getItem('type: popular, page: 1');
-    if (popularMoviesLoaded) {
-      const popularData = JSON.parse(
-        localStorage.getItem('type: popular, page: 1')
-      );
-      dispatch(setPreloadedData({ type: 'popular', data: popularData }));
-    } else {
-      dispatch(getMoviesByType({ type: 'popular', page }));
-    }
+    dispatch(getMoviesByType({ type: 'popular', page }));
   }, []);
   return (
     <div className="grid" ref={gridRef}>
@@ -103,11 +94,11 @@ const MovieGrid = () => {
                     }}
                   ></i>
                 </div>
-                <div className="grid-read-more">
-                  <button className="grid-cell-button">
-                    <Link to="/">Read More</Link>
-                  </button>
-                </div>
+                <Link to={`/movie/${movie.id}`}>
+                  <div className="grid-read-more">
+                    <button className="grid-cell-button">Read More</button>
+                  </div>
+                </Link>
                 <div
                   className="grid-detail"
                   style={{

@@ -7,7 +7,6 @@ import {
   getMoviesByType,
   setCurrentList,
   setPage,
-  setPreloadedData,
   setSearchedToEmpty,
   triggerScrollToGrid
 } from '../../redux/moviesSlice';
@@ -58,7 +57,9 @@ const Header = () => {
     setSearchTerm(e.target.value);
   };
   useEffect(() => {
-    throttledSearch(searchTerm, 1);
+    if (searchTerm.length) {
+      throttledSearch(searchTerm, 1);
+    }
   }, [searchTerm]);
 
   const getDataAndSetStyle = (index, type) => {
@@ -69,13 +70,11 @@ const Header = () => {
     dispatch(triggerScrollToGrid());
     dispatch(setCurrentList(type));
     if (mobileMenu) setMobileMenu(false);
-    const moviesPrevLoaded = localStorage.getItem(type);
-    if (!moviesPrevLoaded) {
-      dispatch(getMoviesByType({ type, page: page }));
-    } else if (!movies[type]) {
-      const data = JSON.parse(localStorage.getItem(type));
-      dispatch(setPreloadedData({ type, data }));
-    }
+    dispatch(getMoviesByType({ type, page: page }));
+  };
+
+  const forwardToHomePage = () => {
+    window.location.replace('/');
   };
   const showUnderLineForMenuItem = (index) => {
     const className = HeaderLinks.find((l) => l.id === index).apiCall;
@@ -87,7 +86,7 @@ const Header = () => {
       <div className="header-nav-wrapper">
         <div className="header-bar"></div>
         <div className="header-navbar">
-          <div className="header-image">
+          <div className="header-image" onClick={forwardToHomePage}>
             <img src={logo} alt="logo" />
             <h3>NetFlux</h3>
           </div>
