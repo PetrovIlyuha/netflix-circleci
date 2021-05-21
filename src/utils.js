@@ -11,3 +11,11 @@ export function throttle(callback, interval) {
     }
   };
 }
+
+export const numToCurrency = (amount) =>
+  new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    currencyDisplay: 'symbol',
+    minimumFractionDigits: 2
+  }).format(amount);

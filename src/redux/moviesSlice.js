@@ -6,7 +6,9 @@ import {
   fallbackImagesFirstLoaded,
   GET_MOVIE_VIDEOS,
   GET_YOUTUBE_PREVIEW,
-  GET_MOVIE_DETAILS
+  GET_MOVIE_DETAILS,
+  GET_MOVIE_CAST,
+  GET_ACTORS_IMAGES
 } from '../services/apiService/movies.service';
 let MOVIES_TYPE = '';
 
@@ -72,6 +74,21 @@ export const getMovieDetails = createAsyncThunk('movie/details', async (id) => {
   return await response.json();
 });
 
+export const getMovieCast = createAsyncThunk(
+  'movie/getCasting',
+  async (movieId) => {
+    const response = await GET_MOVIE_CAST(movieId);
+    const movieCastData = await response.json();
+    const topActors = movieCastData.cast.slice(0, 5);
+    const actorsImages = [];
+    for await (const actor of topActors) {
+      const nextActorImages = await (await GET_ACTORS_IMAGES(actor.id)).json();
+      actorsImages.push(nextActorImages);
+    }
+    return { cast: movieCastData, actorsImages };
+  }
+);
+
 export const triggerScrollToGrid = () => async (dispatch) => {
   dispatch(setIntoView());
   await new Promise((resolve) => {
@@ -102,6 +119,9 @@ export const moviesReducer = createSlice({
     movieDetailsError: null,
     errorLoadingAllVideos: null,
     allMovieTrailers: [],
+    movieCast: null,
+    actorsImages: [],
+    movieCastRequestError: null,
     loadingThumbnailVideo: false,
     loadingThumbnailVideoError: null,
     hoveredMovieGridIndex: null
@@ -203,6 +223,17 @@ export const moviesReducer = createSlice({
     [getAllMovieVideos.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.allMovieTrailers = payload;
+    },
+    [getMovieCast.pending]: (state, { payload }) => {
+      state.loading = true;
+    },
+    [getMovieCast.fulfilled]: (state, { payload: { cast, actorsImages } }) => {
+      state.loading = false;
+      state.movieCast = cast;
+      state.actorsImages = actorsImages;
+    },
+    [getMovieCast.rejected]: (state, { payload }) => {
+      state.movieCastRequestError = payload;
     }
   }
 });
