@@ -2,10 +2,15 @@ import { motion } from 'framer-motion';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getAllMovieVideos, getMovieDetails } from '../../../redux/moviesSlice';
+import {
+  getAllMovieVideos,
+  getMovieCast,
+  getMovieDetails
+} from '../../../redux/moviesSlice';
 import { IMAGE_URL } from '../../../services/apiService/movies.service';
 import Rating from '../rating/Rating';
 import './MovieDetails.scss';
+import Overview from './overview/Overview';
 import Tabs from './tabs/Tabs';
 
 const MovieDetails = () => {
@@ -17,6 +22,7 @@ const MovieDetails = () => {
   useEffect(() => {
     dispatch(getMovieDetails(id));
     dispatch(getAllMovieVideos(id));
+    dispatch(getMovieCast(id));
   }, [id]);
   return (
     movieDetails && (
@@ -82,13 +88,15 @@ const MovieDetails = () => {
                 </ul>
               </div>
               <div className="rating">
-                <Rating rating={movieDetails.vote_average} />
+                <Rating rating={movieDetails.vote_average} details={true} />
               </div>
             </div>
           </div>
           <div className="tabs-section">
             <Tabs>
-              <div label="Overview">Overview</div>
+              <div label="Overview">
+                <Overview />
+              </div>
               <div label="Crew">Crew</div>
               <div label="Media">In Media</div>
               <div label="Reviews">Reviews</div>

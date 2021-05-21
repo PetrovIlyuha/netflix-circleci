@@ -8,8 +8,8 @@ import MovieDetails from './components/content/details/MovieDetails.jsx';
 const App = () => {
   return (
     <div className="App">
-      <Header />
       <Router>
+        <Header />
         <Switch>
           <Route path="/" exact>
             <MainLayout />

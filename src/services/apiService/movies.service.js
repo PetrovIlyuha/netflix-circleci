@@ -17,6 +17,18 @@ export const SEARCH_API_URL = async (searchTerm, page) => {
   );
 };
 
+export const GET_MOVIE_CAST = async (movieId) => {
+  return await fetch(
+    `${INITIAL_REQUEST_URL}/movie/${movieId}/credits?api_key=${API_KEY}`
+  );
+};
+
+export const GET_ACTORS_IMAGES = async (personId) => {
+  return await fetch(
+    `${INITIAL_REQUEST_URL}/person/${personId}/images?api_key=${API_KEY}`
+  );
+};
+
 export const GET_MOVIE_VIDEOS = async (movieId) => {
   return await fetch(
     `${INITIAL_REQUEST_URL}/movie/${movieId}/videos?api_key=${API_KEY}&language=en-US`
