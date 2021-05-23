@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Tab from './Tab';
 import './Tabs.scss';
+import { motion } from 'framer-motion';
 
 const Tabs = ({ children }) => {
   const [activeTab, setActiveTab] = useState(children[0].props.label);
@@ -11,7 +12,16 @@ const Tabs = ({ children }) => {
   };
   console.log(children);
   return (
-    <div className="tabs">
+    <motion.div
+      initial={{ opacity: 0, y: 100, scale: 2 }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: { duration: 0.5, delay: 2.8 }
+      }}
+      className="tabs"
+    >
       <ol className="tab-list">
         {children.map(({ props: { label } }) => {
           return (
@@ -29,7 +39,7 @@ const Tabs = ({ children }) => {
           ({ props: { label, children } }) => label === activeTab && children
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
