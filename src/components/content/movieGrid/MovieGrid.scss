@@ -147,3 +147,54 @@
     }
   }
 }
+
+.grid-cell__iframe {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 1px 1px 8px rgba(240, 240, 240, 0.5);
+  height: 100%;
+  width: 100%;
+  border-radius: 15px;
+  transition: all 400ms;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  filter: grayscale(0.3);
+  iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 76%;
+    object-fit: cover;
+    border-radius: 15px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .grid-iframe__info {
+    position: absolute;
+    bottom: 5%;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    .grid-iframe-button {
+      color: lightgreen;
+      border: 2px solid lightgreen;
+      background-color: transparent;
+      padding: 23px;
+      font-size: 1.4rem;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      &:hover {
+        color: black;
+        background-color: lightgreen;
+      }
+    }
+  }
+}

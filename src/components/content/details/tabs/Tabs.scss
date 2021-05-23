@@ -2,12 +2,15 @@
   text-align: left;
   color: white;
   margin-top: -128px;
+  background: rgba(80, 0, 120, 0.9);
+  border-top: 1px solid white;
 }
 
 .tab-list {
-  padding-left: 0;
+  padding: 10px;
+  padding-left: 24px;
   display: flex;
-  width: 40vw;
+  width: 50vw;
   justify-content: space-between;
 }
 
