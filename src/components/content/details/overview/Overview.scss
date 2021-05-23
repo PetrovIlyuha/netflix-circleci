@@ -1,0 +1,95 @@
+.overview {
+  width: 50vw;
+  display: grid;
+  grid-template-columns: 60% 1fr;
+  column-gap: 2rem;
+  .description {
+    padding: 10px;
+    text-align: center;
+  }
+  .cast__title {
+    text-align: center;
+  }
+
+  .cast {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 1.3rem;
+    column-gap: 3rem;
+    margin-bottom: 3rem;
+    .cast-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 70%;
+      margin: 0 auto;
+      padding: 10px;
+      background: rgba(240, 240, 240, 0.2);
+      border: 1px solid white;
+      box-shadow: 3px 2px 9px rgba(230, 230, 230, 0.4);
+      img {
+        width: 55%;
+      }
+      .actor-name {
+        color: yellow;
+        margin: 7px 0px;
+      }
+      .actor-movie_character {
+        color: orange;
+      }
+    }
+  }
+  .prod__company {
+    h6 {
+      font-weight: bold;
+      text-align: center;
+      text-decoration: underline;
+      text-underline-offset: 8px;
+    }
+    .companies-slider {
+      display: flex;
+      width: 60%;
+      margin: 0 auto;
+      margin-top: 1.4rem;
+      background: rgba(28, 67, 151, 0.822);
+      padding: 10px;
+      border-top: 1px solid white;
+      border-left: 1px solid white;
+      box-shadow: 3px 3px 9px rgba(0, 0, 0, 0.5);
+      .product-company {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        img {
+          width: 3rem;
+          margin-bottom: 1rem;
+        }
+        span {
+          font-size: 0.8rem;
+          text-align: center;
+        }
+      }
+    }
+    margin-top: 1rem;
+  }
+  .details-grid {
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 2rem;
+    padding-right: 10px;
+    .overview-detail {
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      .overview-detail__name {
+        color: orange;
+      }
+      .overview-detail__value {
+        color: yellow;
+      }
+    }
+  }
+}

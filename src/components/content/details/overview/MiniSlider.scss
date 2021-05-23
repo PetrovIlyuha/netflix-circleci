@@ -1,0 +1,34 @@
+.single_mini_slide {
+  //   background-color: white;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 190px;
+  img {
+    margin: 1rem auto;
+    padding: 10px;
+    width: 100%;
+  }
+}
+
+.slide-in-enter {
+  transform: translateX(5vw);
+}
+
+.slide-in-enter-active {
+  transform: translateX(0);
+  transition: all 0.5s;
+}
+
+.slide-in-enter-done {
+  transform: translateX(0);
+}
+
+.slide-in-exit {
+  transform: translate(0);
+}
+
+.slide-in-exit-active {
+  transform: translateX(0);
+}
