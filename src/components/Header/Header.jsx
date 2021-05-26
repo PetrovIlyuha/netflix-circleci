@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import useSound from 'use-sound';
 import './Header.scss';
 import logo from '../../logo.svg';
 import { motion } from 'framer-motion';
+import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import MenuClickFuture from '../../assets/sound/menu_fx_futuristic_1.mp3';
+
 import {
   getMoviesByType,
+  removeHoveredMovieGridIndex,
   setCurrentList,
   setPage,
   setSearchedToEmpty,
@@ -37,6 +42,8 @@ export const HeaderLinks = [
 
 const Header = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
+  const [playMenuClickSound] = useSound(MenuClickFuture);
   const { movies, page, currentlyShowing } = useSelector(
     (state) => state.movies
   );
@@ -63,9 +70,12 @@ const Header = () => {
   }, [searchTerm]);
 
   const getDataAndSetStyle = (index, type) => {
+    playMenuClickSound();
     dispatch(setSearchedToEmpty());
+    history.push('/');
     setSearchTerm('');
     dispatch(setPage(1));
+    dispatch(removeHoveredMovieGridIndex());
     showUnderLineForMenuItem(index);
     dispatch(triggerScrollToGrid());
     dispatch(setCurrentList(type));

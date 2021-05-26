@@ -15,6 +15,7 @@ const MainContent = () => {
     searchWord,
     totalSearchResults
   } = useSelector((state) => state.movies);
+
   return (
     <div className="main-content">
       <SlideShow />
