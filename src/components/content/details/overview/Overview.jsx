@@ -85,9 +85,11 @@ const Overview = () => {
                 key={actor.id}
               >
                 <img
+                  style={{ minHeight: 80 }}
                   src={
-                    `${IMAGE_URL}${actorsImages[index]?.profiles[0]?.file_path}` ||
-                    `${NoActorPhoto}`
+                    actorsImages[index]?.profiles[0]?.file_path !== undefined
+                      ? `${IMAGE_URL}${actorsImages[index]?.profiles[0]?.file_path}`
+                      : NoActorPhoto
                   }
                   alt="actor poster"
                 />
