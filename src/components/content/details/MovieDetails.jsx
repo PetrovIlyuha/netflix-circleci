@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
@@ -9,15 +9,42 @@ import {
 } from '../../../redux/moviesSlice';
 import { IMAGE_URL } from '../../../services/apiService/movies.service';
 import Rating from '../rating/Rating';
+import Crew from './crew/Crew';
 import './MovieDetails.scss';
 import Overview from './overview/Overview';
 import Tabs from './tabs/Tabs';
+import GenreSlidesSound from '../../../assets/sound/heavy_stomp.mp3';
+import useSound from 'use-sound';
 
 const MovieDetails = () => {
   const { id } = useParams();
   const { movieDetails, allMovieTrailers } = useSelector(
     (state) => state.movies
   );
+  const [playGenreSlideSound] = useSound(GenreSlidesSound, { volume: 0.3 });
+  const [timer, setTimer] = useState(Date.now());
+  const [possibleTabSoundTriggers, setPossibleSoundTriggers] = useState([]);
+  useEffect(() => {
+    if (movieDetails) {
+      setPossibleSoundTriggers(
+        [...Array(movieDetails.genres.length).keys()].map((el) => el + 1)
+      );
+    }
+  }, [movieDetails]);
+
+  useEffect(() => {
+    if (possibleTabSoundTriggers.some((p) => p === Math.floor(timer / 1000))) {
+      playGenreSlideSound();
+    }
+  }, [timer]);
+  useEffect(() => {
+    const animationTimer = setInterval(() => {
+      setTimer(Date.now() - timer);
+    }, 1000);
+    return () => {
+      clearInterval(animationTimer);
+    };
+  }, []);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getMovieDetails(id));
@@ -74,11 +101,14 @@ const MovieDetails = () => {
                 <ul className="genres">
                   {movieDetails.genres.map((genre, index) => (
                     <motion.li
-                      initial={{ opacity: 0, x: 300 }}
+                      initial={{
+                        opacity: 0,
+                        x: 300
+                      }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{
                         duration: 0.2,
-                        delay: (index + 1) / 4 + 1.2
+                        delay: index + 1
                       }}
                       key={genre.id}
                     >
@@ -97,7 +127,9 @@ const MovieDetails = () => {
               <div label="Overview">
                 <Overview />
               </div>
-              <div label="Crew">Crew</div>
+              <div label="Crew">
+                <Crew />
+              </div>
               <div label="Media">In Media</div>
               <div label="Reviews">Reviews</div>
             </Tabs>
