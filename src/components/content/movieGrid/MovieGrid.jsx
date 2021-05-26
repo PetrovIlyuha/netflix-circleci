@@ -13,6 +13,10 @@ import './MovieGrid.scss';
 import Rating from '../rating/Rating';
 import { IMAGE_URL } from '../../../services/apiService/movies.service';
 import LazyLoadedImage from '../../lazy-load/LazyLoadedImage';
+import ScreenChangesSound from '../../../assets/sound/change-screen-1.mp3';
+import SimpleMenuClickSound from '../../../assets/sound/ui-click_1_up.mp3';
+import TrailerLoads from '../../../assets/sound/trailer-opens.mp3';
+import useSound from 'use-sound';
 
 const MovieGrid = () => {
   const dispatch = useDispatch();
@@ -26,7 +30,9 @@ const MovieGrid = () => {
   } = useSelector((state) => state.movies);
   const gridRef = useRef();
   const [page, setPage] = useState(1);
-
+  const [playScreenChangedSound] = useSound(ScreenChangesSound);
+  const [playSimpleMenuClick] = useSound(SimpleMenuClickSound);
+  const [playTrailerOpensSound] = useSound(TrailerLoads);
   useEffect(() => {
     setPage(storedPage);
   }, [storedPage]);
@@ -71,12 +77,20 @@ const MovieGrid = () => {
               <div className="grid-iframe__info">
                 <button
                   className="grid-iframe-button"
-                  onClick={() => dispatch(removeHoveredMovieGridIndex())}
+                  onClick={() => {
+                    playSimpleMenuClick();
+                    dispatch(removeHoveredMovieGridIndex());
+                  }}
                 >
                   Back To Full Card
                 </button>
                 <Link to={`/movie/${movie.id}`}>
-                  <button className="grid-iframe-button">Read More</button>
+                  <button
+                    className="grid-iframe-button"
+                    onClick={() => playScreenChangedSound()}
+                  >
+                    Read More
+                  </button>
                 </Link>
               </div>
             </motion.div>
@@ -99,12 +113,18 @@ const MovieGrid = () => {
                     onClick={() => {
                       dispatch(setHoveredMovieGridIndex(index));
                       dispatch(getMovieVideos(movie.id));
+                      playTrailerOpensSound();
                     }}
                   ></i>
                 </div>
                 <Link to={`/movie/${movie.id}`}>
                   <div className="grid-read-more">
-                    <button className="grid-cell-button">Read More</button>
+                    <button
+                      className="grid-cell-button"
+                      onClick={() => playScreenChangedSound()}
+                    >
+                      Read More
+                    </button>
                   </div>
                 </Link>
                 <div
