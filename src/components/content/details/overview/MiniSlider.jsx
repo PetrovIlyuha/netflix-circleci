@@ -5,8 +5,6 @@ import './MiniSlider.scss';
 import { IMAGE_URL } from '../../../../services/apiService/movies.service.js';
 
 const MiniSlider = ({ slides }) => {
-  console.log(slides.map((slide) => `${IMAGE_URL}${slide.logo_path}`));
-  console.log(slides);
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [sliderAnimation, setSliderAnimation] = useState(false);
   const slideIndexRef = React.useRef(0);

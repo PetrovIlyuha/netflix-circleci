@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
+import useSound from 'use-sound';
 import PropTypes from 'prop-types';
 import Tab from './Tab';
 import './Tabs.scss';
 import { motion } from 'framer-motion';
+import MenuClickSound from '../../../../assets/sound/menu_fx_futuristic_1.mp3';
 
 const Tabs = ({ children }) => {
   const [activeTab, setActiveTab] = useState(children[0].props.label);
-  console.log(activeTab);
   const onTabClick = (tab) => {
+    playClickMenuSound();
     setActiveTab(tab);
   };
-  console.log(children);
+  const [playClickMenuSound] = useSound(MenuClickSound);
   return (
     <motion.div
       initial={{ opacity: 0, y: 100, scale: 2 }}

@@ -4,9 +4,7 @@ import classnames from 'classnames';
 import './Tab.scss';
 
 const Tab = ({ activeTab, label, onClick }) => {
-  console.log(activeTab, label);
   const onTabClick = () => {
-    console.log(label);
     onClick(label);
   };
   return (
