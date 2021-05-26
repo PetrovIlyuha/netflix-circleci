@@ -45,7 +45,9 @@ const MiniSlider = ({ slides }) => {
         <CSSTransition in={sliderAnimation} timeout={500} classNames="slide-in">
           <div className="single_mini_slide">
             <img src={`${IMAGE_URL}${slides[currentSlideIndex].logo_path}`} />
-            <span>{slides[currentSlideIndex]?.name}</span>
+            <span>
+              {slides[currentSlideIndex] && slides[currentSlideIndex].name}
+            </span>
           </div>
         </CSSTransition>
       </div>
