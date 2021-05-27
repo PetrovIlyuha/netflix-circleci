@@ -45,19 +45,27 @@ const SearchGrid = () => {
               animate={{ x: 0, y: 0, opacity: 1, rotateY: 0 }}
               transition={{ duration: (0.2 * index) % 2 }}
               key={movie.id}
-              className="grid-cell"
+              className="grid-cell__iframe"
             >
               <iframe
                 key={index}
-                width="100%"
-                onMouseLeave={() =>
-                  dispatch(removeHoveredMovieGridIndex(index))
-                }
                 height="100%"
+                width="100%"
                 autoPlay={true}
                 src={`https://www.youtube.com/embed/${youtubeVideo.items[0].id}?autoplay=0&showinfo=0&controls=0`}
                 frameBorder="0"
               />
+              <div className="grid-iframe__info">
+                <button
+                  className="grid-iframe-button"
+                  onClick={() => dispatch(removeHoveredMovieGridIndex())}
+                >
+                  Back To Full Card
+                </button>
+                <Link to={`/movie/${movie.id}`}>
+                  <button className="grid-iframe-button">Read More</button>
+                </Link>
+              </div>
             </motion.div>
           ) : (
             <motion.div
