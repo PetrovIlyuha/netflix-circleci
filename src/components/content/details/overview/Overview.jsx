@@ -75,7 +75,8 @@ const Overview = () => {
         <div className="description">{movieDetails.overview}</div>
         <h4 className="cast__title">Cast</h4>
         <div className="cast">
-          {movieCast?.cast &&
+          {movieCast !== null &&
+            actorsImages.length > 0 &&
             movieCast.cast.slice(0, 6).map((actor, index) => (
               <motion.div
                 initial={{ opacity: 0, x: -100, y: 100, rotateY: 90 }}
@@ -87,8 +88,9 @@ const Overview = () => {
                 <img
                   style={{ minHeight: 80 }}
                   src={
-                    actorsImages[index]?.profiles[0]?.file_path !== undefined
-                      ? `${IMAGE_URL}${actorsImages[index]?.profiles[0]?.file_path}`
+                    // eslint-disable-line
+                    actorsImages[index]?.profiles[0].file_path !== undefined
+                      ? `${IMAGE_URL}${actorsImages[index].profiles[0].file_path}`
                       : NoActorPhoto
                   }
                   alt="actor poster"

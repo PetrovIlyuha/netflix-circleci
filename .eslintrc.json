@@ -24,6 +24,7 @@
   "rules": {
     "semi": [2, "always"],
     "indent": "off",
+    "no-unsafe-optional-chaining": "off",
     "multiline-ternary": "off",
     "space-before-function-paren": [
       0,
