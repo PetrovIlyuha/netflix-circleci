@@ -44,7 +44,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [playMenuClickSound] = useSound(MenuClickFuture);
-  const { movies, page, currentlyShowing } = useSelector(
+  const { movies, page, currentlyShowing, searchedMovies } = useSelector(
     (state) => state.movies
   );
   const [mobileMenu, setMobileMenu] = useState(false);
@@ -53,6 +53,16 @@ const Header = () => {
     'underlined_now_playing'
   );
   const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    if (
+      !searchedMovies.length ||
+      searchedMovies === undefined ||
+      searchedMovies === null
+    ) {
+      setSearchTerm('');
+    }
+  }, [searchedMovies]);
 
   const toggleMobileMenu = () => {
     setMobileMenu((prev) => !prev);
