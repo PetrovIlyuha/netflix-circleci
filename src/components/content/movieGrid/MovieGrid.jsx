@@ -117,16 +117,16 @@ const MovieGrid = () => {
                     }}
                   ></i>
                 </div>
-                <Link to={`/movie/${movie.id}`}>
-                  <div className="grid-read-more">
+                <div className="grid-read-more">
+                  <Link to={`/movie/${movie.id}`}>
                     <button
                       className="grid-cell-button"
                       onClick={() => playScreenChangedSound()}
                     >
                       Read More
                     </button>
-                  </div>
-                </Link>
+                  </Link>
+                </div>
                 <div
                   className="grid-detail"
                   style={{
