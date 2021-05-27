@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import React, { useEffect, useRef } from 'react';
+import useSound from 'use-sound';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import '../movieGrid/MovieGrid.scss';
@@ -9,8 +10,10 @@ import LazyLoadedImage from '../../lazy-load/LazyLoadedImage';
 import {
   getMovieVideos,
   removeHoveredMovieGridIndex,
-  setHoveredMovieGridIndex
+  setHoveredMovieGridIndex,
+  setSearchedToEmpty
 } from '../../../redux/moviesSlice';
+import ScreenChangesSound from '../../../assets/sound/change-screen-1.mp3';
 
 const SearchGrid = () => {
   const {
@@ -21,6 +24,7 @@ const SearchGrid = () => {
   } = useSelector((state) => state.movies);
   const dispatch = useDispatch();
   const gridRef = useRef();
+  const [playScreenChangedSound] = useSound(ScreenChangesSound);
 
   useEffect(() => {
     if (setGridIntoView) {
@@ -34,6 +38,11 @@ const SearchGrid = () => {
       }, 1000);
     }
   }, [setGridIntoView]);
+
+  const changePageToDetailed = () => {
+    dispatch(setSearchedToEmpty());
+    playScreenChangedSound();
+  };
 
   return (
     <div className="grid" ref={gridRef}>
@@ -63,7 +72,12 @@ const SearchGrid = () => {
                   Back To Full Card
                 </button>
                 <Link to={`/movie/${movie.id}`}>
-                  <button className="grid-iframe-button">Read More</button>
+                  <button
+                    className="grid-iframe-button"
+                    onClick={changePageToDetailed}
+                  >
+                    Read More
+                  </button>
                 </Link>
               </div>
             </motion.div>
@@ -89,11 +103,16 @@ const SearchGrid = () => {
                     }}
                   ></i>
                 </div>
-                <div className="grid-read-more">
-                  <button className="grid-cell-button">
-                    <Link to="/">Read More</Link>
-                  </button>
-                </div>
+                <Link to={`movie/${movie.id}`}>
+                  <div className="grid-read-more">
+                    <button
+                      className="grid-cell-button"
+                      onClick={changePageToDetailed}
+                    >
+                      Read More
+                    </button>
+                  </div>
+                </Link>
                 <div
                   className="grid-detail"
                   style={{
