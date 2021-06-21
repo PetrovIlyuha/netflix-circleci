@@ -8,7 +8,8 @@ import {
   GET_YOUTUBE_PREVIEW,
   GET_MOVIE_DETAILS,
   GET_MOVIE_CAST,
-  GET_ACTORS_IMAGES
+  GET_ACTORS_IMAGES,
+  GET_MOVIE_IMAGES
 } from '../services/apiService/movies.service';
 let MOVIES_TYPE = '';
 
@@ -74,6 +75,11 @@ export const getMovieDetails = createAsyncThunk('movie/details', async (id) => {
   return await response.json();
 });
 
+export const getMovieImages = createAsyncThunk('movie/images', async (id) => {
+  const response = await GET_MOVIE_IMAGES(id);
+  return await response.json();
+});
+
 export const getMovieCast = createAsyncThunk(
   'movie/getCasting',
   async (movieId) => {
@@ -116,6 +122,8 @@ export const moviesReducer = createSlice({
     searchWord: '',
     youtubeVideo: null,
     movieDetails: null,
+    movieImages: null,
+    movieImagesError: null,
     movieDetailsError: null,
     errorLoadingAllVideos: null,
     allMovieTrailers: [],
@@ -234,6 +242,17 @@ export const moviesReducer = createSlice({
     },
     [getMovieCast.rejected]: (state, { payload }) => {
       state.movieCastRequestError = payload;
+    },
+    [getMovieImages.pending]: (state, { payload }) => {
+      state.loading = true;
+    },
+    [getMovieImages.fulfilled]: (state, { payload }) => {
+      state.movieImages = payload;
+      state.loading = false;
+    },
+    [getMovieImages.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.movieImagesError = payload;
     }
   }
 });
