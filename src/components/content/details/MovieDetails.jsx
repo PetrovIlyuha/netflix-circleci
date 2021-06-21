@@ -5,7 +5,8 @@ import { useParams } from 'react-router-dom';
 import {
   getAllMovieVideos,
   getMovieCast,
-  getMovieDetails
+  getMovieDetails,
+  getMovieImages
 } from '../../../redux/moviesSlice';
 import { IMAGE_URL } from '../../../services/apiService/movies.service';
 import Rating from '../rating/Rating';
@@ -13,14 +14,17 @@ import Crew from './crew/Crew';
 import './MovieDetails.scss';
 import Overview from './overview/Overview';
 import Tabs from './tabs/Tabs';
+import Media from './media/Media';
 import GenreSlidesSound from '../../../assets/sound/heavy_stomp.mp3';
 import useSound from 'use-sound';
 
 const MovieDetails = () => {
   const { id } = useParams();
-  const { movieDetails, allMovieTrailers } = useSelector(
+
+  const { movieDetails, allMovieTrailers, movieImages } = useSelector(
     (state) => state.movies
   );
+
   const [playGenreSlideSound] = useSound(GenreSlidesSound, { volume: 0.3 });
   const [timer, setTimer] = useState(Date.now());
   const [possibleTabSoundTriggers, setPossibleSoundTriggers] = useState([]);
@@ -50,6 +54,7 @@ const MovieDetails = () => {
     dispatch(getMovieDetails(id));
     dispatch(getAllMovieVideos(id));
     dispatch(getMovieCast(id));
+    dispatch(getMovieImages(id));
   }, [id]);
   return (
     movieDetails && (
@@ -130,12 +135,14 @@ const MovieDetails = () => {
               <div label="Crew">
                 <Crew />
               </div>
-              <div label="Media">In Media</div>
+              <div label="Media">
+                <Media trailers={allMovieTrailers} images={movieImages} />
+              </div>
               <div label="Reviews">Reviews</div>
             </Tabs>
           </div>
         </div>
-        <div>
+        {/* <div>
           <h2 className="trailers-heading">All Available Movie Trailers</h2>
           <div className="movie-trailers">
             {allMovieTrailers.length > 0 &&
@@ -150,7 +157,7 @@ const MovieDetails = () => {
                 );
               })}
           </div>
-        </div>
+        </div> */}
         {/* {movieDetails && JSON.stringify(movieDetails)} */}
       </div>
     )
