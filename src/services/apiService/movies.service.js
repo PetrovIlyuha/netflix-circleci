@@ -46,6 +46,13 @@ export const GET_MOVIE_DETAILS = async (id) => {
     `${INITIAL_REQUEST_URL}/movie/${id}?api_key=${API_KEY}&language=en-US`
   );
 };
+
+export const GET_MOVIE_IMAGES = async (id) => {
+  return await fetch(
+    `${INITIAL_REQUEST_URL}/movie/${id}/images?api_key=${API_KEY}`
+  );
+};
+
 export const fallbackImagesFirstLoaded = [
   'https://image.tmdb.org/t/p/original//pgqgaUx1cJb5oZQQ5v0tNARCeBp.jpg',
   'https://image.tmdb.org/t/p/original//8yhtzsbBExY8mUct2GOk4LDDuGH.jpg',
