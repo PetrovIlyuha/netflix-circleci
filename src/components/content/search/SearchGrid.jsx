@@ -31,8 +31,7 @@ const SearchGrid = () => {
       window.scrollTo(0, 0);
       setTimeout(() => {
         gridRef.current.scrollIntoView({
-          top: 700,
-          left: 0,
+          block: 'nearest',
           behavior: 'smooth'
         });
       }, 1000);
